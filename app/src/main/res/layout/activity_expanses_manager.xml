@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#E3E0D9">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:gravity="center"
+            android:text="Expanses manager"
+            android:textColor="#A3B18A"
+            android:textSize="35dp"
+            android:textStyle="bold"
+            android:layout_marginEnd="15dp"
+            />
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="0dp"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/icons_green_car" />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/expanses_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/backround_white"
+        android:hint="Expanse:"
+        android:textColorHint="#3A5A40"
+        android:padding="12dp" />
+
+    <EditText
+        android:id="@+id/describe_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/backround_white"
+        android:hint="Describe payment:"
+        android:textColorHint="#3A5A40"
+        android:padding="12dp" />
+    <EditText
+        android:id="@+id/payment_date_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/backround_white"
+        android:hint="Date of payment:"
+        android:textColorHint="#3A5A40"
+        android:padding="12dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:orientation="vertical"
+        android:layout_marginTop="45dp"
+        android:layout_marginRight="70dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/backround_gradient">
+
+        <TextView
+            android:id="@+id/txt_lessons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Lessons paid:"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:padding="5dp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/balance_amount"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20"
+            android:textColor="@color/white"
+            android:textSize="70sp"
+            android:textStyle="bold"
+            />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_add_payment"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:text="Add payment"
+        android:textSize="20sp"
+        android:backgroundTint="#A3B18A"
+        android:textColor="#3A5A40"/>
+
+    <Button
+        android:id="@+id/btn_view_expanses"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:text="View expenses"
+        android:textSize="20sp"
+        android:backgroundTint="#A3B18A"
+        android:textColor="#3A5A40"/>
+</LinearLayout>

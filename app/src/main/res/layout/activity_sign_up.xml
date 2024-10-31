@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#E3E0D9">
+
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="100dp"
+        app:srcCompat="@drawable/icons_green_car" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="40dp"
+            android:text="AutoDrive"
+            android:textColor="#A3B18A"
+            android:textStyle="bold"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="50dp"
+            />
+
+
+    <EditText
+        android:id="@+id/username_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/backround_white"
+        android:hint="Username"
+        android:textColorHint="#3A5A40"
+        android:padding="12dp" />
+
+    <EditText
+        android:id="@+id/password_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/backround_white"
+        android:hint="Password"
+        android:textColorHint="#3A5A40"
+        android:padding="12dp" />
+
+    <EditText
+        android:id="@+id/confirm_password_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/backround_white"
+        android:hint="Confirm Password"
+        android:textColorHint="#3A5A40"
+        android:padding="12dp" />
+
+
+        <Button
+            android:id="@+id/btnSignUp"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="60dp"
+            android:text="Sign up"
+            android:textSize="20sp"
+            android:backgroundTint="#A3B18A"
+            android:textColor="#3A5A40"
+        />
+
+
+</LinearLayout>
+

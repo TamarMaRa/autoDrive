@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#E3E0D9">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        >
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:gravity="center"
+            android:text="Time manager"
+            android:textColor="#A3B18A"
+            android:textSize="35dp"
+            android:textStyle="bold"
+            />
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="15dp"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/icons_green_car" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:layout_margin="30dp"
+        android:background="@drawable/backround_gradient">
+
+        <TextView
+            android:id="@+id/txt_lessons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Lessons had:"
+            android:textColor="@android:color/white"
+            android:textSize="25sp"
+            android:padding="5dp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/lesson_amount"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20"
+            android:textColor="@color/white"
+            android:textSize="100sp"
+            android:textStyle="bold"
+            />
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btn_add_event"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:text="Add a lesson"
+        android:textSize="20sp"
+        android:backgroundTint="#A3B18A"
+        android:textColor="#3A5A40"/>
+    <Button
+        android:id="@+id/btn_add_reminder"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="25dp"
+        android:layout_gravity="center"
+        android:text="Add a reminder"
+        android:textSize="20sp"
+        android:backgroundTint="#A3B18A"
+        android:textColor="#3A5A40"/>
+
+    <Button
+        android:id="@+id/btn_view_lessons"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="25dp"
+        android:layout_gravity="center"
+        android:text="View lessons"
+        android:textSize="20sp"
+        android:backgroundTint="#A3B18A"
+        android:textColor="#3A5A40"/>
+</LinearLayout>
