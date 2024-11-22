@@ -4,14 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#E3E0D9">
+    android:background="@color/light_background">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="120dp"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true"
         android:gravity="center"
+        android:layout_marginTop="30dp"
         >
 
         <TextView
@@ -20,7 +21,7 @@
             android:layout_height="100dp"
             android:gravity="center"
             android:text="Expanses manager"
-            android:textColor="#A3B18A"
+            android:textColor="@color/light_green"
             android:textSize="35dp"
             android:textStyle="bold"
             android:layout_marginEnd="15dp"
@@ -44,7 +45,7 @@
         android:layout_marginRight="40dp"
         android:background="@drawable/backround_white"
         android:hint="Expanse:"
-        android:textColorHint="#3A5A40"
+        android:textColorHint="@color/dark_green"
         android:padding="12dp" />
 
     <EditText
@@ -56,7 +57,7 @@
         android:layout_marginRight="40dp"
         android:background="@drawable/backround_white"
         android:hint="Describe payment:"
-        android:textColorHint="#3A5A40"
+        android:textColorHint="@color/dark_green"
         android:padding="12dp" />
     <EditText
         android:id="@+id/payment_date_input"
@@ -67,7 +68,7 @@
         android:layout_marginRight="40dp"
         android:background="@drawable/backround_white"
         android:hint="Date of payment:"
-        android:textColorHint="#3A5A40"
+        android:textColorHint="@color/dark_green"
         android:padding="12dp" />
 
     <LinearLayout
@@ -113,17 +114,7 @@
         android:layout_gravity="center"
         android:text="Add payment"
         android:textSize="20sp"
-        android:backgroundTint="#A3B18A"
-        android:textColor="#3A5A40"/>
+        android:backgroundTint="@color/light_green"
+        android:textColor="@color/dark_green"/>
 
-    <Button
-        android:id="@+id/btn_view_expanses"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center"
-        android:text="View expenses"
-        android:textSize="20sp"
-        android:backgroundTint="#A3B18A"
-        android:textColor="#3A5A40"/>
 </LinearLayout>

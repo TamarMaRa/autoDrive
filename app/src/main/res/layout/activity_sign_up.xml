@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#E3E0D9">
+    android:background="@color/light_background">
 
 
     <ImageView
@@ -21,7 +21,7 @@
             android:gravity="center"
             android:textSize="40dp"
             android:text="AutoDrive"
-            android:textColor="#A3B18A"
+            android:textColor="@color/light_green"
             android:textStyle="bold"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="50dp"
@@ -29,15 +29,15 @@
 
 
     <EditText
-        android:id="@+id/username_input"
+        android:id="@+id/email_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:background="@drawable/backround_white"
-        android:hint="Username"
-        android:textColorHint="#3A5A40"
+        android:hint="Email:"
+        android:textColorHint="@color/dark_green"
         android:padding="12dp" />
 
     <EditText
@@ -49,7 +49,7 @@
         android:layout_marginRight="40dp"
         android:background="@drawable/backround_white"
         android:hint="Password"
-        android:textColorHint="#3A5A40"
+        android:textColorHint="@color/dark_green"
         android:padding="12dp" />
 
     <EditText
@@ -61,7 +61,7 @@
         android:layout_marginRight="40dp"
         android:background="@drawable/backround_white"
         android:hint="Confirm Password"
-        android:textColorHint="#3A5A40"
+        android:textColorHint="@color/dark_green"
         android:padding="12dp" />
 
 
@@ -73,8 +73,8 @@
             android:layout_marginTop="60dp"
             android:text="Sign up"
             android:textSize="20sp"
-            android:backgroundTint="#A3B18A"
-            android:textColor="#3A5A40"
+            android:backgroundTint="@color/light_green"
+            android:textColor="@color/dark_green"
         />
 
 

@@ -5,13 +5,20 @@
     <item
         android:id="@+id/nav_time"
         android:icon="@drawable/icons_clock"
-        android:title="Time" />
+        android:title="Manager" />
+    <item
+        android:id="@+id/nav_time_list"
+        android:icon="@drawable/icons_list"
+        android:title="Lessons" />
 
     <item
         android:id="@+id/nav_expanses"
         android:icon="@drawable/icons_money"
+        android:title="Manager" />
+    <item
+        android:id="@+id/nav_expanses_list"
+        android:icon="@drawable/icons_list"
         android:title="Expanses" />
-
     <item
         android:id="@+id/nav_logout"
         android:icon="@drawable/icons_logout"

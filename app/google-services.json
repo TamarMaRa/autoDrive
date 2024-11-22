@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "682364404642",
+    "project_id": "autodrivedatabase",
+    "storage_bucket": "autodrivedatabase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:682364404642:android:4193a790c262edd219e8fb",
+        "android_client_info": {
+          "package_name": "com.example.autodrive"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjXW5Y-ZnRGLY8le2VIw3o9_IvpiB5hlE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
