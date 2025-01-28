@@ -1,11 +1,13 @@
-package com.example.autodrive.itemLesson;
+package com.example.autodrive.views.itemLesson;
 
 public class LessonItem {
     int numLesson;
     String timeLesson;
+    String dateLesson;
 
-    public LessonItem(int numLesson, String timeLesson) {
+    public LessonItem(int numLesson,String dateLesson, String timeLesson) {
         this.numLesson = numLesson;
+        this.dateLesson = dateLesson;
         this.timeLesson = timeLesson;
     }
 
@@ -23,9 +25,16 @@ public class LessonItem {
         this.timeLesson = timeLesson;
     }
 
+    public String getDateLesson() {
+        return dateLesson;
+    }
+    public void setDateLesson(String date) {
+        this.dateLesson = date;
+    }
+
     @Override
     public String toString() {
-        return "[" + numLesson +
+        return "[" + numLesson + ", " + dateLesson +
                 ", " + timeLesson + ']';
     }
 }

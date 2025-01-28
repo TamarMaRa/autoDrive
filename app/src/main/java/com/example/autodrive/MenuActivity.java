@@ -11,12 +11,11 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import com.example.autodrive.databinding.ActivityMainBinding;
-import com.example.autodrive.fragments.ExpanseManagerFragment;
+import com.example.autodrive.fragments.ExpenseManagerFragment;
 import com.example.autodrive.fragments.TimeManagerFragment;
-import com.example.autodrive.fragments.nonMenuFragments.ExpansesListFragment;
-import com.example.autodrive.fragments.nonMenuFragments.LessonListFragment;
+import com.example.autodrive.fragments.ExpensesListFragment;
+import com.example.autodrive.fragments.LessonListFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -59,11 +58,11 @@ public class MenuActivity extends AppCompatActivity {
                     break;
                 }
                 case R.id.nav_expanses: {
-                    replaceFragment(new ExpanseManagerFragment());
+                    replaceFragment(new ExpenseManagerFragment());
                     break;
                 }
                 case R.id.nav_expanses_list: {
-                    replaceFragment(new ExpansesListFragment());
+                    replaceFragment(new ExpensesListFragment());
                     break;
                 }
                 case R.id.nav_logout: {

@@ -1,4 +1,4 @@
-package com.example.autodrive.itemLesson;
+package com.example.autodrive.views.itemLesson;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import com.example.autodrive.R;
 
 import java.util.List;
 
-class MyViewAdapterLessons extends RecyclerView.Adapter<MyViewAdapterLessons.MyViewHolder> {
+public class MyViewAdapterLessons extends RecyclerView.Adapter<MyViewAdapterLessons.MyViewHolder> {
 
     private Context context;
     private List<LessonItem> lessonList;
@@ -34,7 +34,10 @@ class MyViewAdapterLessons extends RecyclerView.Adapter<MyViewAdapterLessons.MyV
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         LessonItem lesson = lessonList.get(position);
         holder.numLessonTextView.setText("Lesson: " + lesson.getNumLesson());
-        holder.timeLessonTextView.setText("Time: " + lesson.getTimeLesson());
+        holder.dateLessonTextView.setText(lesson.getDateLesson());
+        holder.timeLessonTextView.setText("Time of lesson: " + lesson.getTimeLesson());
+
+
     }
 
     @Override
@@ -44,11 +47,13 @@ class MyViewAdapterLessons extends RecyclerView.Adapter<MyViewAdapterLessons.MyV
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView numLessonTextView;
+        TextView dateLessonTextView;
         TextView timeLessonTextView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             numLessonTextView = itemView.findViewById(R.id.tvLessonNumber);
+            dateLessonTextView = itemView.findViewById(R.id.tvLessonDate);
             timeLessonTextView = itemView.findViewById(R.id.tvLessonTime);
         }
     }

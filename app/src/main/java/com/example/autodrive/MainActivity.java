@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements FBAuthHelper.FBRe
         etPwd = findViewById(R.id.password_input);
         btnSignUp = findViewById(R.id.btnSignUp);
 
+
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

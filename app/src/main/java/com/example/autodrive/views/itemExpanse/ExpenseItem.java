@@ -1,11 +1,11 @@
-package com.example.autodrive.itemExpanse;
+package com.example.autodrive.views.itemExpanse;
 
-public class ExpansesItemActivity {
+public class ExpenseItem {
     int expense;
     String date;
     String description;
 
-    public ExpansesItemActivity(int expense, String date, String description) {
+    public ExpenseItem(int expense, String date, String description) {
         this.expense = expense;
         this.date = date;
         this.description = description;
