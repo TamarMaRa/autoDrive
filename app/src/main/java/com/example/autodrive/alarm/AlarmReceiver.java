@@ -15,7 +15,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "Receive", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Receive", Toast.LENGTH_LONG).show();
         Toast.makeText(context, "Driving lesson is in 30 minutes", Toast.LENGTH_LONG).show();
         // Create a notification
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

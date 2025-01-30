@@ -29,7 +29,7 @@ public class AlarmManager extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.fragment_time_manager);
 
         checkExactAlarmPermission();
 
@@ -39,6 +39,7 @@ public class AlarmManager extends AppCompatActivity {
 
         btn_add_reminder.setOnClickListener(v -> showDateTimePickerDialog());
     }
+
 
     private void showDateTimePickerDialog() {
         final Calendar calendar = Calendar.getInstance();

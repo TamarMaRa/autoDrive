@@ -99,6 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="TextView"
+        android:visibility="invisible"
         android:textColor="@color/dark_green"
         android:textSize="25dp" />
 
