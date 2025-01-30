@@ -2,11 +2,8 @@ package com.example.autodrive;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -30,12 +27,9 @@ public class MainActivity extends AppCompatActivity implements FBAuthHelper.FBRe
         btnSignUp = findViewById(R.id.btnSignUp);
 
 
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
-                startActivity(intent);
-            }
+        btnSignUp.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+            startActivity(intent);
         });
 
         FBAuthHelper fbAuthHelper = new FBAuthHelper(this, this);
@@ -60,14 +54,15 @@ public class MainActivity extends AppCompatActivity implements FBAuthHelper.FBRe
     }
 
     private void checkPasswordValidity(String password) {
-        if (password.length() >= 6) {        // Password is valid
+        if(password.length() >= 6) {        // Password is valid
         } else {        // Password is invalid, show an error message
             etPwd.setError("Password must be at least 6 characters long");
         }
     }
 
     private void checkEmailValidity(String email) {
-        if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {        // Email is valid
+        if(android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            // Email is valid
         } else {        // Email is invalid, show an error message
             etEmail.setError("Invalid email address");
         }
