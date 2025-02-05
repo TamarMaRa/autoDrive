@@ -36,13 +36,16 @@ public class MyViewAdapterLessons extends RecyclerView.Adapter<MyViewAdapterLess
         holder.numLessonTextView.setText("Lesson: " + lesson.getNumLesson());
         holder.dateLessonTextView.setText(lesson.getDateLesson());
         holder.timeLessonTextView.setText("Time of lesson: " + lesson.getTimeLesson());
-
-
     }
 
     @Override
     public int getItemCount() {
         return lessonList.size();
+    }
+
+    public void updateLessons(List<LessonItem> newLessonList) {
+        this.lessonList = newLessonList;
+        notifyDataSetChanged();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.autodrive.enterApp.FBAuthHelper;
 import com.google.firebase.auth.FirebaseUser;
 
+//https://github.com/belindaatschool/noteslist
 public class MainActivity extends AppCompatActivity implements FBAuthHelper.FBReply {
 
     EditText etEmail, etPwd;

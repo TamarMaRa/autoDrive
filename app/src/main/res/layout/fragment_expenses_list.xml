@@ -40,7 +40,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:layout_weight="1"
-        >
+        android:layout_marginBottom="50dp">
     </androidx.recyclerview.widget.RecyclerView>
-
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:text="+"
+        android:backgroundTint="@color/light_green"
+        android:textColor="@color/dark_green"
+        android:textSize="20sp"/>
 </LinearLayout>
