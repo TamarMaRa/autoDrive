@@ -10,11 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.autodrive.R;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 
 
 import java.util.List;
 
-public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.MyViewHolder> {
+public class LessonAdapter extends FirestoreRecyclerAdapter<LessonAdapter.MyViewHolder> {
 
     private Context context;
     private List<LessonItem> lessonList;
