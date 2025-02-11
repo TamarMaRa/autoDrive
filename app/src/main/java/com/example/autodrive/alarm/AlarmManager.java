@@ -29,7 +29,7 @@ public class AlarmManager extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_time_manager);
+        setContentView(R.layout.fragment_edit_lesson_note);
 
         checkExactAlarmPermission();
 

@@ -31,10 +31,4 @@ public class LessonItem {
     public void setDateLesson(String date) {
         this.dateLesson = date;
     }
-
-    @Override
-    public String toString() {
-        return "[" + numLesson + ", " + dateLesson +
-                ", " + timeLesson + ']';
-    }
 }
