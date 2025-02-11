@@ -42,7 +42,7 @@
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewLesson"
+        android:id="@+id/rvNotes"
         android:layout_width="match_parent"
         android:layout_height="452dp"
         android:layout_marginTop="50dp"
@@ -50,7 +50,7 @@
         android:layout_weight="1"></androidx.recyclerview.widget.RecyclerView>
 
     <Button
-        android:id="@+id/btn_add_event"
+        android:id="@+id/btnAddNote"
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
@@ -59,4 +59,5 @@
         android:backgroundTint="@color/light_green"
         android:textColor="@color/dark_green"
         android:textSize="20sp"/>
+
 </LinearLayout>

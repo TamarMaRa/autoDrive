@@ -11,14 +11,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.autodrive.R;
 
+
 import java.util.List;
 
-public class MyViewAdapterLessons extends RecyclerView.Adapter<MyViewAdapterLessons.MyViewHolder> {
+public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.MyViewHolder> {
 
     private Context context;
     private List<LessonItem> lessonList;
 
-    public MyViewAdapterLessons(Context context, List<LessonItem> lessonList) {
+    public LessonAdapter(Context context, List<LessonItem> lessonList) {
         this.context = context;
         this.lessonList = lessonList;
     }
