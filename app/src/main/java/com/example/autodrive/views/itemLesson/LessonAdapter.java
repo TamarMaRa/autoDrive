@@ -11,51 +11,37 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.autodrive.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
+public class LessonAdapter extends FirestoreRecyclerAdapter<LessonItem, LessonAdapter.LessonViewHolder> {
 
-import java.util.List;
+    private final Context context;
 
-public class LessonAdapter extends FirestoreRecyclerAdapter<LessonAdapter.MyViewHolder> {
-
-    private Context context;
-    private List<LessonItem> lessonList;
-
-    public LessonAdapter(Context context, List<LessonItem> lessonList) {
+    public LessonAdapter(@NonNull FirestoreRecyclerOptions<LessonItem> options, Context context) {
+        super(options);
         this.context = context;
-        this.lessonList = lessonList;
     }
+
+    @Override
+    protected void onBindViewHolder(@NonNull LessonViewHolder holder, int position, @NonNull LessonItem lesson) {
+        holder.numLessonTextView.setText("Lesson: " + lesson.getNumLesson());
+        holder.dateLessonTextView.setText("Date: " + lesson.getDateLesson());
+        holder.timeLessonTextView.setText("Time: " + lesson.getTimeLesson());
+    }
+
+
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_lesson, parent, false);
-        return new MyViewHolder(view);
+    public LessonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_lesson, parent, false);
+        return new LessonViewHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        LessonItem lesson = lessonList.get(position);
-        holder.numLessonTextView.setText("Lesson: " + lesson.getNumLesson());
-        holder.dateLessonTextView.setText(lesson.getDateLesson());
-        holder.timeLessonTextView.setText("Time of lesson: " + lesson.getTimeLesson());
-    }
+    public static class LessonViewHolder extends RecyclerView.ViewHolder {
+        TextView numLessonTextView, dateLessonTextView, timeLessonTextView;
 
-    @Override
-    public int getItemCount() {
-        return lessonList.size();
-    }
-
-    public void updateLessons(List<LessonItem> newLessonList) {
-        this.lessonList = newLessonList;
-        notifyDataSetChanged();
-    }
-
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView numLessonTextView;
-        TextView dateLessonTextView;
-        TextView timeLessonTextView;
-
-        public MyViewHolder(@NonNull View itemView) {
+        public LessonViewHolder(@NonNull View itemView) {
             super(itemView);
             numLessonTextView = itemView.findViewById(R.id.tvLessonNumber);
             dateLessonTextView = itemView.findViewById(R.id.tvLessonDate);

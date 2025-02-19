@@ -1,74 +1,76 @@
 package com.example.autodrive.fragments;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.autodrive.R;
-import com.example.autodrive.views.itemLesson.LessonItem;
+import com.example.autodrive.views.itemLesson.FireStoreLessonHelper;
 import com.example.autodrive.views.itemLesson.LessonAdapter;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.example.autodrive.views.itemLesson.LessonItem;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.Query;
 
 public class LessonListFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private LessonAdapter lessonAdapter;
-    private List<LessonItem> lessonList;
-    private SharedPreferences sharedPreferences;
-    private static final String PREFS_NAME = "LessonPrefs";
-    private static final String LESSONS_KEY = "lessons";
 
     public LessonListFragment() {
         // Required empty public constructor
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lesson_list, container, false);
 
-        recyclerView = view.findViewById(R.id.rvNotes);
+        recyclerView = view.findViewById(R.id.rvNotes); // Make sure this matches the XML ID
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        sharedPreferences = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-
-        lessonList = loadLessons();
-        lessonAdapter = new LessonAdapter(getContext(), lessonList);
-        recyclerView.setAdapter(lessonAdapter);
-
-        Button btnAddLesson = view.findViewById(R.id.btnAddNote);
-        btnAddLesson.setOnClickListener(v -> updateLessons());
+        setupRecyclerView();
 
         return view;
     }
 
-    private List<LessonItem> loadLessons() {
-        Set<String> lessonsSet = sharedPreferences.getStringSet(LESSONS_KEY, new HashSet<>());
-        List<LessonItem> lessons = new ArrayList<>();
-        for (String lesson : lessonsSet) {
-            String[] parts = lesson.split(",");
-            if (parts.length == 3) {
-                lessons.add(new LessonItem(Integer.parseInt(parts[0]), parts[1], parts[2]));
-            }
-        }
-        return lessons;
+    private void setupRecyclerView() {
+        Query query = FireStoreLessonHelper.getCollectionRef()
+                .orderBy("numLesson", Query.Direction.ASCENDING);
+
+        FirestoreRecyclerOptions<LessonItem> options = new FirestoreRecyclerOptions.Builder<LessonItem>()
+                .setQuery(query, LessonItem.class)
+                .build();
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext())); // Use requireContext() instead of "this"
+        lessonAdapter = new LessonAdapter(options, getContext());
+        recyclerView.setAdapter(lessonAdapter);
     }
 
-    private void updateLessons() {
-        lessonList.clear();
-        lessonList.addAll(loadLessons());
-        lessonAdapter.notifyDataSetChanged();
+    @Override
+    public void onStart() {
+        super.onStart();
+        lessonAdapter.startListening();
+
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        lessonAdapter.stopListening();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        lessonAdapter.notifyDataSetChanged();
+
+    }
+
 }
