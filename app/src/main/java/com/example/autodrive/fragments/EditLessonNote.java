@@ -20,11 +20,12 @@ import com.example.autodrive.R;
 import com.example.autodrive.views.itemLesson.FireStoreLessonHelper;
 import com.example.autodrive.views.itemLesson.LessonItem;
 
-public class EditLessonNote extends Fragment {
+import java.util.ArrayList;
+
+public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FBReply {
 
     private EditText lessonNumberInput, dateInput, timeInput;
     private Button btnAddLesson;
-    private SharedPreferences sharedPreferences;
     private FireStoreLessonHelper fireStoreLessonHelper;
 
     public EditLessonNote() {
@@ -37,9 +38,6 @@ public class EditLessonNote extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_edit_lesson_note, container, false);
-
-        // Initialize SharedPreferences
-        sharedPreferences = requireActivity().getSharedPreferences("LessonPrefs", Context.MODE_PRIVATE);
 
         // Find UI components
         lessonNumberInput = rootView.findViewById(R.id.lesson_number_input);
@@ -70,12 +68,6 @@ public class EditLessonNote extends Fragment {
     }
 
     private void saveLesson(LessonItem lesson) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Set<String> lessonSet = sharedPreferences.getStringSet("lessons", new HashSet<>());
-        lessonSet.add(lesson.getNumLesson() + "," + lesson.getDateLesson() + "," + lesson.getTimeLesson());
-        editor.putStringSet("lessons", lessonSet);
-        editor.apply();
-
         fireStoreLessonHelper.add(lesson);
     }
 
