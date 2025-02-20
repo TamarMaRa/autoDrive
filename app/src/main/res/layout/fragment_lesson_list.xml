@@ -49,15 +49,25 @@
         android:layout_marginBottom="50dp"
         android:layout_weight="1"></androidx.recyclerview.widget.RecyclerView>
 
-    <Button
-        android:id="@+id/btnAddNote"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:text="+"
-        android:backgroundTint="@color/light_green"
-        android:textColor="@color/dark_green"
-        android:textSize="20sp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/ivBack"
+            android:src="@drawable/ic_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="Back"/>
 
+        <ImageView
+            android:id="@+id/ivSave"
+            android:src="@drawable/ic_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="Save"/>
+
+    </LinearLayout>
 </LinearLayout>

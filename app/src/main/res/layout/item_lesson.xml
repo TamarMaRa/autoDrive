@@ -11,7 +11,7 @@
     <ImageView
         android:id="@+id/imgIcon"
         android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_height="match_parent"
         android:src="@drawable/icons_white_car" />
 
     <LinearLayout
@@ -30,7 +30,7 @@
                 android:id="@+id/tvLessonNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lesson number X:"
+                android:text="Lesson X:"
                 android:textColor="@color/dark_green"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -38,7 +38,7 @@
                 android:id="@+id/tvEmpty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="       "
+                android:text="  "
                 android:textColor="@color/dark_green"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 

@@ -38,9 +38,12 @@ public class FireStoreLessonHelper {
     }
 
     public void delete(String id) {
-        collectionRef.document(id).delete().addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot deleted with ID: " + id)).addOnFailureListener(e -> Log.w(TAG, "Error deleting document", e));
+        collectionRef.document(id).delete().addOnSuccessListener(aVoid -> {
+            Log.d(TAG, "DocumentSnapshot deleted with ID: " + id);
+        }).addOnFailureListener(e -> {
+            Log.w(TAG, "Error deleting document", e);
+        });
     }
-
     public static CollectionReference getCollectionRef() {
         return collectionRef;
     }

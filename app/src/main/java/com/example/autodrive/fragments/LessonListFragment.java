@@ -42,7 +42,7 @@ public class LessonListFragment extends Fragment {
 
     private void setupRecyclerView() {
         Query query = FireStoreLessonHelper.getCollectionRef()
-                .orderBy("numLesson", Query.Direction.ASCENDING);
+                .orderBy("numLesson", Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<LessonItem> options = new FirestoreRecyclerOptions.Builder<LessonItem>()
                 .setQuery(query, LessonItem.class)
