@@ -49,7 +49,7 @@ public class LessonListFragment extends Fragment {
                 .build();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext())); // Use requireContext() instead of "this"
-        lessonAdapter = new LessonAdapter(options, getContext());
+        lessonAdapter = new LessonAdapter(options, getContext(),false);
         recyclerView.setAdapter(lessonAdapter);
     }
 
