@@ -76,7 +76,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone">
+            >
+
+            <Button
+                android:id="@+id/btnEDIT"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/dark_green"
+                android:text="Edit"
+                android:textColor="@color/light_green"
+                android:textSize="18sp"
+                android:layout_marginLeft="15dp"
+                />
 
             <Button
                 android:id="@+id/btnSave"
@@ -84,7 +96,8 @@
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:text="✔️"
-                android:backgroundTint="@color/dark_green"/>
+                android:backgroundTint="@color/dark_green"
+                android:visibility="gone"/>
             <Button
                 android:id="@+id/btnDelete"
                 android:layout_width="70dp"
@@ -92,7 +105,8 @@
                 android:layout_weight="1"
                 android:layout_marginLeft="15dp"
                 android:text="❌"
-                android:backgroundTint="@color/dark_green"/>
+                android:backgroundTint="@color/dark_green"
+                android:visibility="gone"/>
     </LinearLayout>
 
 
