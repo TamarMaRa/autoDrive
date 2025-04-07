@@ -44,6 +44,21 @@ public class FireStoreLessonHelper {
             Log.w(TAG, "Error deleting document", e);
         });
     }
+
+
+//    public void delete(String lessonId) {
+//        db.collection("lessons").document(lessonId)
+//                .delete()
+//                .addOnSuccessListener(aVoid -> {
+//                    // Success logic
+//                    Log.d("Delete", "DocumentSnapshot successfully deleted!");
+//                })
+//                .addOnFailureListener(e -> {
+//                    // Failure logic
+//                    Log.w("Delete", "Error deleting document", e);
+//                });
+//    }
+
     public static CollectionReference getCollectionRef() {
         return collectionRef;
     }

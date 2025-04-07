@@ -1,6 +1,9 @@
 package com.example.autodrive.views.itemLesson;
 
+import java.util.UUID;
+
 public class LessonItem {
+    private String id;
     private int numLesson;  // Ensure this is an int
     private String dateLesson;
     private String timeLesson;
@@ -9,10 +12,15 @@ public class LessonItem {
     public LessonItem() {}
 
     public LessonItem(int numLesson, String dateLesson, String timeLesson) {
+        this.id = UUID.randomUUID().toString(); // Generate a unique ID
         this.numLesson = numLesson;
         this.dateLesson = dateLesson;
         this.timeLesson = timeLesson;
     }
+
+    public String getId() {return id;}
+
+    public void setId(String id) {this.id = id;}
 
     public int getNumLesson() {
         return numLesson;
