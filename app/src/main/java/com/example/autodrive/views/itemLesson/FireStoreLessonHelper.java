@@ -25,8 +25,10 @@ public class FireStoreLessonHelper {
     }
 
     public void add(LessonItem lesson) {
-        collectionRef.add(lesson).addOnSuccessListener(documentReference ->
-                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId())).addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+        collectionRef.add(lesson).addOnSuccessListener(documentReference -> {
+            String docId = documentReference.getId(); // Log the document ID
+            Log.d(TAG, "DocumentSnapshot added with ID: " + docId);
+        }).addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
 
     public void update(String id, LessonItem lesson) {
@@ -34,30 +36,24 @@ public class FireStoreLessonHelper {
                 "numLesson", lesson.getNumLesson(),
                 "dateLesson", lesson.getDateLesson(),
                 "timeLesson", lesson.getTimeLesson()
-        ).addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot updated with ID: " + id)).addOnFailureListener(e -> Log.w(TAG, "Error updating document", e));
-    }
-
-    public void delete(String id) {
-        collectionRef.document(id).delete().addOnSuccessListener(aVoid -> {
-            Log.d(TAG, "DocumentSnapshot deleted with ID: " + id);
+        ).addOnSuccessListener(aVoid -> {
+            Log.d(TAG, "DocumentSnapshot updated with ID: " + id);
         }).addOnFailureListener(e -> {
-            Log.w(TAG, "Error deleting document", e);
+            Log.w(TAG, "Error updating document", e);
+            // You might also show a Toast to notify the user of failure
         });
     }
 
 
-//    public void delete(String lessonId) {
-//        db.collection("lessons").document(lessonId)
-//                .delete()
-//                .addOnSuccessListener(aVoid -> {
-//                    // Success logic
-//                    Log.d("Delete", "DocumentSnapshot successfully deleted!");
-//                })
-//                .addOnFailureListener(e -> {
-//                    // Failure logic
-//                    Log.w("Delete", "Error deleting document", e);
-//                });
-//    }
+    public void delete(String id) {
+        collectionRef.document(id).delete()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "DocumentSnapshot deleted with ID: " + id);
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Error deleting document", e);
+                });
+    }
 
     public static CollectionReference getCollectionRef() {
         return collectionRef;
