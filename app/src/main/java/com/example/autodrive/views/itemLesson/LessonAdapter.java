@@ -70,8 +70,11 @@ public class LessonAdapter extends FirestoreRecyclerAdapter<LessonItem, LessonAd
 
         // Setup delete button listener
         holder.deleteButton.setOnTouchListener((v, event) -> {
-            String docId = this.getSnapshots().getSnapshot(position).getId();
-            holder.showDeleteConfirmationDialog(docId);
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                v.performClick();
+                String docId = this.getSnapshots().getSnapshot(position).getId();
+                holder.showDeleteConfirmationDialog(docId);
+            }
             return true;
         });
     }
