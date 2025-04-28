@@ -1,7 +1,10 @@
 package com.example.autodrive.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,89 +15,64 @@ import android.view.ViewGroup;
 
 import com.example.autodrive.R;
 import com.example.autodrive.views.itemExpanse.ExpenseItem;
-import com.example.autodrive.views.itemExpanse.MyViewAdapterExpanse;
+import com.example.autodrive.views.itemExpanse.ExpanseAdapter;
+import com.example.autodrive.views.itemExpanse.FireStoreExpanseHelper;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.Query;
 
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ExpensesListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ExpensesListFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    // RecyclerView components
     private RecyclerView recyclerView;
-    private MyViewAdapterExpanse expenseAdapter;
-    private List<ExpenseItem> expenseList;
-
+    private ExpanseAdapter expanseAdapter;
+    private FireStoreExpanseHelper expanseHelper;
 
     public ExpensesListFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ExpansesListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ExpensesListFragment newInstance(String param1, String param2) {
-        ExpensesListFragment fragment = new ExpensesListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @SuppressLint("MissingInflatedId")
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_expenses_list, container, false);
 
-        // Initialize RecyclerView
-        recyclerView = view.findViewById(R.id.recyclerViewExpense); // Ensure this ID matches your XML
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView = view.findViewById(R.id.rvExpense);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        // Initialize lesson list and adapter
-        expenseList = new ArrayList<>();
-        populateLessonList(); // Populate the lesson list with sample data
-        expenseAdapter = new MyViewAdapterExpanse(getContext(),expenseList);
+        expanseHelper = new FireStoreExpanseHelper(); // Now no argument needed!
 
-        // Set the adapter to the RecyclerView
-        recyclerView.setAdapter(expenseAdapter);
+        setupRecyclerView();
+
         return view;
     }
 
-    private void populateLessonList() {
-       expenseList.add(new ExpenseItem(180, "01/11/24", "lesson 1"));
-       expenseList.add(new ExpenseItem(180, "02/11/24", "lesson 2"));
-       expenseList.add(new ExpenseItem(180, "03/11/24", "lesson 3"));
-       expenseList.add(new ExpenseItem(180, "04/11/24", "lesson 4"));
-       expenseList.add(new ExpenseItem(180, "05/11/24", "lesson 5"));
-       expenseList.add(new ExpenseItem(180, "06/11/24", "lesson 6"));
+    private void setupRecyclerView() {
+        Query query = expanseHelper.getCollectionRef()
+                .orderBy("date", Query.Direction.DESCENDING);
+
+        FirestoreRecyclerOptions<ExpenseItem> options = new FirestoreRecyclerOptions.Builder<ExpenseItem>()
+                .setQuery(query, ExpenseItem.class)
+                .build();
+
+        expanseAdapter = new ExpanseAdapter(options, requireContext(), false);
+        recyclerView.setAdapter(expanseAdapter);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        expanseAdapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        expanseAdapter.stopListening();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        expanseAdapter.notifyDataSetChanged();
     }
 }

@@ -1,4 +1,4 @@
-package com.example.autodrive.views.itemLesson;
+package com.example.autodrive.views.itemExpanse;
 
 import android.content.Context;
 import android.util.Log;
@@ -15,24 +15,24 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.autodrive.R;
+import com.example.autodrive.views.itemLesson.LessonItem;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-public class LessonAdapter extends FirestoreRecyclerAdapter<LessonItem, LessonAdapter.LessonViewHolder> {
+public class ExpanseAdapter extends FirestoreRecyclerAdapter<ExpenseItem, ExpanseAdapter.ExpanseViewHolder> {
 
     private final Context context;
 
-
-    public LessonAdapter(@NonNull FirestoreRecyclerOptions<LessonItem> options, Context context, boolean isEditing) {
+    public ExpanseAdapter(@NonNull FirestoreRecyclerOptions<ExpenseItem> options, Context context, boolean isEditing) {
         super(options);
         this.context = context;
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull LessonViewHolder holder, int position, @NonNull LessonItem lesson) {
+    protected void onBindViewHolder(@NonNull com.example.autodrive.views.itemExpanse.ExpanseAdapter.ExpanseViewHolder holder, int position, @NonNull ExpenseItem expenseItem) {
         // Bind data to views
-        holder.numLessonTextView.setText(String.valueOf(lesson.getNumLesson()));
-        holder.dateLessonTextView.setText(lesson.getDateLesson());
-        holder.timeLessonTextView.setText(lesson.getTimeLesson());
+        holder.amountTV.setText(String.valueOf(expenseItem.getExpense()));
+        holder.dateExpanseTV.setText(expenseItem.getDate());
+        holder.discriptionExpanseTV.setText(expenseItem.getDescription());
 
 
         // Set up listeners for buttons in edit mode
@@ -52,34 +52,34 @@ public class LessonAdapter extends FirestoreRecyclerAdapter<LessonItem, LessonAd
         holder.saveButton.setOnClickListener(v -> {
             try {
                 // Safely extract and parse lesson number
-                String rawText = holder.numLessonTextView.getText().toString().replace("Lesson: ", "").trim();
-                int numLesson = Integer.parseInt(rawText);
+                String rawText = holder.dateExpanseTV.getText().toString().replace("Date: ", "").trim();
+                int numExpanse = Integer.parseInt(rawText);
 
                 // Create updated lesson object
-                LessonItem updatedLesson = new LessonItem(
-                        numLesson,
-                        holder.dateLessonTextView.getText().toString(),
-                        holder.timeLessonTextView.getText().toString()
+                ExpenseItem updatedExpanse = new ExpenseItem(
+                        numExpanse,
+                        holder.dateExpanseTV.getText().toString(),
+                        holder.discriptionExpanseTV.getText().toString()
                 );
 
                 // Get the correct Firestore document ID
-                String lessonId = getSnapshots().getSnapshot(position).getId();
-                Log.d("LessonAdapter", "Saving lesson with ID: " + lessonId); // Add logging for document ID
+                String expenseID = getSnapshots().getSnapshot(position).getId();
+                Log.d("ExpanseAdapter", "Saving expanse with ID: " + expenseID); // Add logging for document ID
 
-                // Update lesson in Firestore
-                FireStoreLessonHelper helper = new FireStoreLessonHelper(null);
-                helper.update(lessonId, updatedLesson);  // Ensure this is actually being called
+                // Update expanse in Firestore
+                FireStoreExpanseHelper helper = new FireStoreExpanseHelper(null);
+                helper.update(expenseID, updatedExpanse);  // Ensure this is actually being called
 
                 // Disable editing and show a toast message
                 holder.disableEditing();
-                Toast.makeText(context, "Lesson updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "expanse updated", Toast.LENGTH_SHORT).show();
 
                 // Force the RecyclerView to refresh the data
                 notifyItemChanged(position); // This will update the specific item
             } catch (NumberFormatException e) {
-                Toast.makeText(context, "Invalid lesson number format!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Invalid expanse number format!", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
-                Toast.makeText(context, "Error saving lesson: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Error saving expanse: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -97,13 +97,13 @@ public class LessonAdapter extends FirestoreRecyclerAdapter<LessonItem, LessonAd
 
     @NonNull
     @Override
-    public LessonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_lesson, parent, false);
-        return new LessonViewHolder(view);
+    public ExpanseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_expense, parent, false);
+        return new com.example.autodrive.views.itemExpanse.ExpanseAdapter.ExpanseViewHolder(view);
     }
 
-    public class LessonViewHolder extends RecyclerView.ViewHolder {
-        EditText numLessonTextView, dateLessonTextView, timeLessonTextView;
+    public class ExpanseViewHolder extends RecyclerView.ViewHolder {
+        EditText amountTV, dateExpanseTV, discriptionExpanseTV;
 
         private Button saveButton, deleteButton, editButton;
         private boolean isEditing = false; // Track whether the item is in edit mode
@@ -114,42 +114,42 @@ public class LessonAdapter extends FirestoreRecyclerAdapter<LessonItem, LessonAd
         public boolean isEditing() {
             return isEditing;
         }
-        public LessonViewHolder(@NonNull View itemView) {
+        public ExpanseViewHolder(@NonNull View itemView) {
             super(itemView);
-            numLessonTextView = itemView.findViewById(R.id.tvLessonNumber);
-            dateLessonTextView = itemView.findViewById(R.id.tvLessonDate);
-            timeLessonTextView = itemView.findViewById(R.id.tvLessonTime);
-            deleteButton = itemView.findViewById(R.id.btnDelete);
-            saveButton = itemView.findViewById(R.id.btnSave);
-            editButton = itemView.findViewById(R.id.btnEDIT);
+            amountTV = itemView.findViewById(R.id.tvAmount);
+            dateExpanseTV = itemView.findViewById(R.id.tvDateExpanse);
+            discriptionExpanseTV = itemView.findViewById(R.id.tvDescription);
+            deleteButton = itemView.findViewById(R.id.btnDelete2);
+            saveButton = itemView.findViewById(R.id.btnSave2);
+            editButton = itemView.findViewById(R.id.btnEDIT2);
         }
         public void enableEditing() {
             isEditing = true;
             editButton.setVisibility(View.GONE);
             deleteButton.setVisibility(View.VISIBLE);
             saveButton.setVisibility(View.VISIBLE);
-            numLessonTextView.setEnabled(true);
-            dateLessonTextView.setEnabled(true);
-            timeLessonTextView.setEnabled(true);
+            amountTV.setEnabled(true);
+            dateExpanseTV.setEnabled(true);
+            discriptionExpanseTV.setEnabled(true);
         }
         public void disableEditing() {
             isEditing = false;
             editButton.setVisibility(View.VISIBLE);
             deleteButton.setVisibility(View.GONE);
             saveButton.setVisibility(View.GONE);
-            numLessonTextView.setEnabled(false);
-            dateLessonTextView.setEnabled(false);
-            timeLessonTextView.setEnabled(false);
+            amountTV.setEnabled(false);
+            dateExpanseTV.setEnabled(false);
+            discriptionExpanseTV.setEnabled(false);
         }
 
-        public void showDeleteConfirmationDialog(String lessonId) {
+        public void showDeleteConfirmationDialog(String expanseID) {
             new AlertDialog.Builder(context)
                     .setMessage("Are you sure you want to delete this item?")
                     .setCancelable(false)
                     .setPositiveButton("Yes", (dialog, id) -> {
                         //String lessonId = getItem(position).getId(); // Ensure ID is correct
-                        FireStoreLessonHelper helper = new FireStoreLessonHelper(null);
-                        helper.delete(lessonId); // Make sure Firestore helper is correctly deleting the document
+                        FireStoreExpanseHelper helper = new FireStoreExpanseHelper(null);
+                        helper.delete(expanseID); // Make sure Firestore helper is correctly deleting the document
                         Toast.makeText(context, "Item deleted", Toast.LENGTH_SHORT).show();
 
                         disableEditing(); // Ensure this is called to stop edit mode

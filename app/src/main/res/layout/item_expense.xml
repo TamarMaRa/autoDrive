@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -11,7 +12,7 @@
     <ImageView
         android:id="@+id/imgIcon"
         android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_height="match_parent"
         android:src="@drawable/icons_white_car" />
 
     <LinearLayout
@@ -23,41 +24,113 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tvExpenseAmount"
+                android:id="@+id/txt1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Expenses:"
+                android:layout_height="25dp"
+                android:text="Amount: "
+                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/dark_green"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                tools:ignore="SpeakableTextPresentCheck"
+                android:layout_gravity="center"/>
+
+            <EditText
+                android:id="@+id/tvAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:enabled="false"
+                android:inputType="number"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/dark_green"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/tvEmpty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="   "
+                android:text="  "
+                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/dark_green"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                tools:ignore="SpeakableTextPresentCheck" />
 
-            <TextView
-                android:id="@+id/tvExpenseDate"
+            <EditText
+                android:id="@+id/tvDateExpanse"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Date:"
+                android:layout_height="45dp"
+                android:enabled="false"
+                android:inputType="date"
+                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/dark_green"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                tools:ignore="TouchTargetSizeCheck" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvExpenseDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Description:"
-            android:textColor="@color/dark_green"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
 
+            <EditText
+                android:id="@+id/tvDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="time"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/dark_green"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/tvEmpty2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  "
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/dark_green"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <LinearLayout
+                android:id="@+id/editButtonsLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <Button
+                    android:id="@+id/btnEDIT2"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="60dp"
+                    android:backgroundTint="@color/dark_green"
+                    android:text="Edit"
+                    android:textColor="@color/light_green"
+                    android:textSize="18sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <Button
+                    android:id="@+id/btnSave2"
+                    android:layout_width="70dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="✔️"
+                    android:backgroundTint="@color/dark_green"
+                    android:visibility="gone"/>
+                <Button
+                    android:id="@+id/btnDelete2"
+                    android:layout_width="70dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="15dp"
+                    android:text="❌"
+                    android:backgroundTint="@color/dark_green"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

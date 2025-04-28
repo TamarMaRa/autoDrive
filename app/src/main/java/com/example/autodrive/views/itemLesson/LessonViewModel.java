@@ -1,10 +1,8 @@
-package com.example.autodrive.views;
+package com.example.autodrive.views.itemLesson;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import com.example.autodrive.views.itemLesson.LessonItem;
 
 import java.util.ArrayList;
 import java.util.List;
