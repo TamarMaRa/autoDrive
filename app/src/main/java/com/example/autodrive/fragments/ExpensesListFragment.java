@@ -38,9 +38,6 @@ public class ExpensesListFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.rvExpense);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-
-        expanseHelper = new FireStoreExpanseHelper(); // Now no argument needed!
-
         setupRecyclerView();
 
         return view;

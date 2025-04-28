@@ -11,62 +11,41 @@ import java.util.ArrayList;
 
 public class FireStoreExpanseHelper {
     private static final String TAG = "FireStoreExpanseHelper";
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FBReply fbReply;
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    private static CollectionReference collectionRef = db.collection("expanses").document(currentUser.getUid()).collection("my_expanses");
+    private FireStoreExpanseHelper.FBReply fbReply;
 
     public interface FBReply {
         void getAllSuccess(ArrayList<ExpenseItem> expanses);
         void getOneSuccess(ExpenseItem expanse);
     }
 
-    // Constructor that accepts FBReply
-    public FireStoreExpanseHelper(FBReply fbReply) {
+    public FireStoreExpanseHelper(FireStoreExpanseHelper.FBReply fbReply) {
         this.fbReply = fbReply;
     }
 
-    // New constructor with no arguments
-    public FireStoreExpanseHelper() {
-        this.fbReply = null;
+    public void add(ExpenseItem expenseItem) {
+        collectionRef.add(expenseItem).addOnSuccessListener(documentReference -> {
+            String docId = documentReference.getId(); // Log the document ID
+            Log.d(TAG, "DocumentSnapshot added with ID: " + docId);
+        }).addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
 
-    private FirebaseUser getCurrentUser() {
-        return FirebaseAuth.getInstance().getCurrentUser();
-    }
-
-    private CollectionReference getUserCollection() {
-        FirebaseUser user = getCurrentUser();
-        if (user == null) {
-            throw new IllegalStateException("User not authenticated");
-        }
-        return db.collection("expanses")
-                .document(user.getUid())
-                .collection("my_expanses");
-    }
-
-    public void add(ExpenseItem expanse) {
-        getUserCollection().add(expanse)
-                .addOnSuccessListener(docRef -> {
-                    Log.d(TAG, "DocumentSnapshot added with ID: " + docRef.getId());
-                })
-                .addOnFailureListener(e -> {
-                    Log.w(TAG, "Error adding document", e);
-                });
-    }
-
-    public void update(String id, ExpenseItem expense) {
-        getUserCollection().document(id).update(
-                "expense", expense.getExpense(),
-                "date", expense.getDate(),
-                "description", expense.getDescription()
+    public void update(String id, ExpenseItem expenseItem) {
+        collectionRef.document(id).update(
+                "expanse", expenseItem.getExpense(),
+                "date", expenseItem.getDate(),
+                "description", expenseItem.getDescription()
         ).addOnSuccessListener(aVoid -> {
             Log.d(TAG, "DocumentSnapshot updated with ID: " + id);
         }).addOnFailureListener(e -> {
             Log.w(TAG, "Error updating document", e);
+            // You might also show a Toast to notify the user of failure
         });
     }
-
     public void delete(String id) {
-        getUserCollection().document(id).delete()
+        collectionRef.document(id).delete()
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "DocumentSnapshot deleted with ID: " + id);
                 })
@@ -75,7 +54,8 @@ public class FireStoreExpanseHelper {
                 });
     }
 
-    public CollectionReference getCollectionRef() {
-        return getUserCollection();
+    public static CollectionReference getCollectionRef() {
+        return collectionRef;
     }
 }
+

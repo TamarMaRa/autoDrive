@@ -36,7 +36,6 @@ public class LessonListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         setupRecyclerView();
-
         return view;
     }
 
