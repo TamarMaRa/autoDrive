@@ -15,9 +15,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.autodrive.R;
-import com.example.autodrive.views.itemLesson.LessonItem;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+
 public class ExpanseAdapter extends FirestoreRecyclerAdapter<ExpenseItem, ExpanseAdapter.ExpanseViewHolder> {
 
     private final Context context;
@@ -33,7 +33,6 @@ public class ExpanseAdapter extends FirestoreRecyclerAdapter<ExpenseItem, Expans
         holder.amountTV.setText(String.valueOf(expenseItem.getExpense()));
         holder.dateExpanseTV.setText(expenseItem.getDate());
         holder.discriptionExpanseTV.setText(expenseItem.getDescription());
-
 
         // Set up listeners for buttons in edit mode
         if (holder.isEditing()) {
@@ -51,11 +50,11 @@ public class ExpanseAdapter extends FirestoreRecyclerAdapter<ExpenseItem, Expans
         // Setup save button listener
         holder.saveButton.setOnClickListener(v -> {
             try {
-                // Safely extract and parse lesson number
-                String rawText = holder.dateExpanseTV.getText().toString().replace("Date: ", "").trim();
-                int numExpanse = Integer.parseInt(rawText);
+                // Safely extract and parse amount
+                String rawAmount = holder.amountTV.getText().toString().trim();
+                int numExpanse = Integer.parseInt(rawAmount);
 
-                // Create updated lesson object
+                // Create updated expense object
                 ExpenseItem updatedExpanse = new ExpenseItem(
                         numExpanse,
                         holder.dateExpanseTV.getText().toString(),
@@ -66,7 +65,7 @@ public class ExpanseAdapter extends FirestoreRecyclerAdapter<ExpenseItem, Expans
                 String expenseID = getSnapshots().getSnapshot(position).getId();
                 Log.d("ExpanseAdapter", "Saving expanse with ID: " + expenseID); // Add logging for document ID
 
-                // Update expanse in Firestore
+                // Update expense in Firestore
                 FireStoreExpanseHelper helper = new FireStoreExpanseHelper(null);
                 helper.update(expenseID, updatedExpanse);  // Ensure this is actually being called
 
@@ -77,12 +76,11 @@ public class ExpanseAdapter extends FirestoreRecyclerAdapter<ExpenseItem, Expans
                 // Force the RecyclerView to refresh the data
                 notifyItemChanged(position); // This will update the specific item
             } catch (NumberFormatException e) {
-                Toast.makeText(context, "Invalid expanse number format!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Invalid amount format!", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 Toast.makeText(context, "Error saving expanse: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
 
         // Setup delete button listener
         holder.deleteButton.setOnTouchListener((v, event) -> {
@@ -147,12 +145,11 @@ public class ExpanseAdapter extends FirestoreRecyclerAdapter<ExpenseItem, Expans
                     .setMessage("Are you sure you want to delete this item?")
                     .setCancelable(false)
                     .setPositiveButton("Yes", (dialog, id) -> {
-                        //String lessonId = getItem(position).getId(); // Ensure ID is correct
                         FireStoreExpanseHelper helper = new FireStoreExpanseHelper(null);
-                        helper.delete(expanseID); // Make sure Firestore helper is correctly deleting the document
+                        helper.delete(expanseID);
                         Toast.makeText(context, "Item deleted", Toast.LENGTH_SHORT).show();
 
-                        disableEditing(); // Ensure this is called to stop edit mode
+                        disableEditing();
                     })
                     .setNegativeButton("No", (dialog, id) -> dialog.dismiss())
                     .show();

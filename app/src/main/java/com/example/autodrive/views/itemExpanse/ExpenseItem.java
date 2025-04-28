@@ -1,9 +1,13 @@
 package com.example.autodrive.views.itemExpanse;
 
 public class ExpenseItem {
-    int expense;
-    String date;
-    String description;
+    private int expense;
+    private String date;
+    private String description;
+
+    public ExpenseItem() {
+        // Needed for Firestore
+    }
 
     public ExpenseItem(int expense, String date, String description) {
         this.expense = expense;
@@ -14,6 +18,7 @@ public class ExpenseItem {
     public int getExpense() {
         return expense;
     }
+
     public void setExpense(int expense) {
         this.expense = expense;
     }
@@ -21,6 +26,7 @@ public class ExpenseItem {
     public String getDate() {
         return date;
     }
+
     public void setDate(String date) {
         this.date = date;
     }
@@ -28,14 +34,13 @@ public class ExpenseItem {
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
 
     @Override
     public String toString() {
-        return "[" + expense + ", " + date +
-                ", " + description +
-                ']';
+        return "[" + expense + ", " + date + ", " + description + "]";
     }
 }
