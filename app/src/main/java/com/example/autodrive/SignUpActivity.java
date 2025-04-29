@@ -2,18 +2,18 @@ package com.example.autodrive;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.autodrive.enterApp.FBAuthHelper;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SignUpActivity extends AppCompatActivity implements FBAuthHelper.FBReply {
-    Button btnSignUp;
-    EditText etEmail, etPwd;
+
+    private EditText etEmail, etPwd, etPwd2;
+    private FBAuthHelper fbAuthHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,60 +21,87 @@ public class SignUpActivity extends AppCompatActivity implements FBAuthHelper.FB
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_up);
 
-        btnSignUp = findViewById(R.id.btnSignUp);
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-                startActivity(intent);
+        initializeViews();
+        setupAuthHelper();
+        setupSignUpButton();
+    }
 
-                //TODO: add code above that saves the info into the database, only than change screens
-            }
-        });
+    private void initializeViews() {
         etEmail = findViewById(R.id.email_input);
         etPwd = findViewById(R.id.password_input);
-
-        FBAuthHelper fbAuthHelper = new FBAuthHelper(this, this);
-
-        findViewById(R.id.btnSignUp).setOnClickListener(v -> {
-            if (etEmail.getText().toString().isEmpty()) {
-                etEmail.setError("Invalid email address");
-                return;
-            }
-            if (etPwd.getText().toString().isEmpty()) {
-                etPwd.setError("Password must be at least 6 characters long");
-                return;
-            }
-            checkEmailValidity(etEmail.getText().toString());
-            checkPasswordValidity(etPwd.getText().toString());
-
-            fbAuthHelper.createUser(
-                    etEmail.getText().toString(),
-                    etPwd.getText().toString());
-        });
+        etPwd2 = findViewById(R.id.confirm_password_input);
     }
 
-    private void checkPasswordValidity(String password) {
-        if (password.length() >= 6) {        // Password is valid
-        } else {        // Password is invalid, show an error message
-            etPwd.setError("Password must be at least 6 characters long");
+    private void setupAuthHelper() {
+        fbAuthHelper = new FBAuthHelper(this, this);
+    }
+
+    private void setupSignUpButton() {
+        Button btnSignUp = findViewById(R.id.btnSignUp);
+        btnSignUp.setOnClickListener(v -> attemptSignUp());
+    }
+
+    private void attemptSignUp() {
+        clearErrors();
+
+        String email = etEmail.getText().toString().trim();
+        String password = etPwd.getText().toString().trim();
+        String confirmPassword = etPwd2.getText().toString().trim();
+
+        if (!isInputValid(email, password, confirmPassword)) return;
+
+        fbAuthHelper.createUser(email, password);
+    }
+
+    private boolean isInputValid(String email, String password, String confirmPassword) {
+        if (email.isEmpty()) {
+            etEmail.setError("Email required");
+            return false;
         }
+
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            etEmail.setError("Invalid email format");
+            return false;
+        }
+
+        if (password.isEmpty()) {
+            etPwd.setError("Password required");
+            return false;
+        }
+
+        if (password.length() < 6) {
+            etPwd.setError("Minimum 6 characters required");
+            return false;
+        }
+
+        if (!password.equals(confirmPassword)) {
+            etPwd2.setError("Passwords don't match");
+            return false;
+        }
+
+        return true;
     }
 
-    private void checkEmailValidity(String email) {
-        if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {        // Email is valid
-        } else {        // Email is invalid, show an error message
-            etEmail.setError("Invalid email address");
-        }
+    private void clearErrors() {
+        etEmail.setError(null);
+        etPwd.setError(null);
+        etPwd2.setError(null);
     }
+
+    public void authError(String errorMessage) {
+        Toast.makeText(this, "Sign up failed: " + errorMessage, Toast.LENGTH_LONG).show();
+    }
+
 
     @Override
     public void createUserSuccsess(FirebaseUser user) {
-        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-        startActivity(intent);
+        Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
     @Override
     public void loginSuccsess(FirebaseUser user) {
+
     }
 }

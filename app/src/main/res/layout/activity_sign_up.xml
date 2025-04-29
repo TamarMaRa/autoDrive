@@ -50,7 +50,8 @@
         android:background="@drawable/backround_white"
         android:hint="Password"
         android:textColorHint="@color/dark_green"
-        android:padding="12dp" />
+        android:padding="12dp"
+        android:inputType="textPassword" />
 
     <EditText
         android:id="@+id/confirm_password_input"
@@ -62,10 +63,11 @@
         android:background="@drawable/backround_white"
         android:hint="Confirm Password"
         android:textColorHint="@color/dark_green"
-        android:padding="12dp" />
+        android:padding="12dp"
+        android:inputType="textPassword" />
 
 
-        <Button
+    <Button
             android:id="@+id/btnSignUp"
             android:layout_width="250dp"
             android:layout_height="50dp"

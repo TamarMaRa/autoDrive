@@ -52,7 +52,9 @@
         android:background="@drawable/backround_white"
         android:hint="Password"
         android:textColorHint="@color/dark_green"
-        android:padding="12dp" />
+        android:padding="12dp"
+        android:inputType="textPassword" />
+
 
     <Button
         android:id="@+id/btnLogIn"
