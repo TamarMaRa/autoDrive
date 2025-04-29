@@ -1,7 +1,9 @@
 package com.example.autodrive;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -70,21 +72,25 @@ public class MenuActivity extends AppCompatActivity {
                             .setTitle("Logout")
                             .setMessage("Are you sure you want to logout?")
                             .setPositiveButton("Yes", (dialog, which) -> {
-                                // Log out the user from Firebase
+                                // 1. Sign out from Firebase
                                 FirebaseAuth.getInstance().signOut();
 
-                                // Navigate to login activity
+                                // 2. Clear any local user data/cache (add this)
+                                clearUserPreferences();  // Implement this method if needed
+
+                                // 3. Navigate to login screen with FLAG_ACTIVITY_CLEAR_TASK
                                 Intent intent = new Intent(MenuActivity.this, MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear back stack
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
 
-                                // Finish the current activity
-                                finish();
+                                // 4. Force finish all activities
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    finishAndRemoveTask();  // More aggressive cleanup
+                                } else {
+                                    finish();
+                                }
                             })
-                            .setNegativeButton("No", (dialog, which) -> {
-                                // Dismiss the dialog
-                                dialog.dismiss();
-                            })
+                            .setNegativeButton("No", null)
                             .show();
                     break;
                 }
@@ -100,5 +106,10 @@ public class MenuActivity extends AppCompatActivity {
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.linearLayout, toReplace);
         transaction.commit();
+    }
+
+    private void clearUserPreferences() {
+        SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        preferences.edit().clear().apply();
     }
 }

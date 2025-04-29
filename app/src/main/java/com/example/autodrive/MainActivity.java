@@ -8,6 +8,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.autodrive.enterApp.FBAuthHelper;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 //https://github.com/belindaatschool/noteslist
@@ -78,4 +79,14 @@ public class MainActivity extends AppCompatActivity implements FBAuthHelper.FBRe
     @Override
     public void createUserSuccsess(FirebaseUser user) {
     }
+
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+//            // User is logged in, redirect to main activity
+//            startActivity(new Intent(this, MenuActivity.class));
+//            finish();
+//        }
+//    }
 }
