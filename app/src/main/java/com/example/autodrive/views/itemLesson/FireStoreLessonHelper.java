@@ -12,7 +12,8 @@ public class FireStoreLessonHelper {
     private static final String TAG = "FireStoreLessonHelper";
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-    private static CollectionReference collectionRef = db.collection("lessons").document(currentUser.getUid()).collection("my_lessons");
+    //private static CollectionReference collectionRef = db.collection("lessons").document(currentUser.getUid()).collection("my_lessons");
+    private static CollectionReference collectionRef = db.collection("users").document(currentUser.getUid()).collection("my_lessons");
     private FireStoreLessonHelper.FBReply fbReply;
 
     public interface FBReply {

@@ -16,10 +16,8 @@ public class FireStoreExpanseHelper {
     private static final String TAG = "FireStoreExpanseHelper";
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-    private static CollectionReference collectionRef = db.collection("expanses")
-            .document(currentUser.getUid())
-            .collection("my_expanses");
-
+    //private static CollectionReference collectionRef = db.collection("expanses").document(currentUser.getUid()).collection("my_expanses");
+    private static CollectionReference collectionRef = db.collection("users").document(currentUser.getUid()).collection("my_expanses");
     public interface FBReply {
         void getAllSuccess(ArrayList<LessonItem> lessons);
         void getOneSuccess(LessonItem lesson);
