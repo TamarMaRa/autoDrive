@@ -1,5 +1,10 @@
 package com.example.autodrive;
 
+import static com.example.autodrive.MainActivity.EMAIL_KEY;
+import static com.example.autodrive.MainActivity.NO_STRING_AVAILABLE;
+import static com.example.autodrive.MainActivity.PASSWORD_KEY;
+
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -19,6 +24,7 @@ import com.example.autodrive.fragments.EditLessonNote;
 import com.example.autodrive.fragments.ExpensesListFragment;
 import com.example.autodrive.fragments.LessonListFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MenuActivity extends AppCompatActivity {
@@ -78,6 +84,13 @@ public class MenuActivity extends AppCompatActivity {
                                 // 2. Clear any local user data/cache (add this)
                                 clearUserPreferences();  // Implement this method if needed
 
+                                SharedPreferences prefs = getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = prefs.edit();
+                                editor.putString(EMAIL_KEY, NO_STRING_AVAILABLE);
+                                editor.putString(PASSWORD_KEY, NO_STRING_AVAILABLE);
+                                editor.apply();
+
+
                                 // 3. Navigate to login screen with FLAG_ACTIVITY_CLEAR_TASK
                                 Intent intent = new Intent(MenuActivity.this, MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -98,7 +111,6 @@ public class MenuActivity extends AppCompatActivity {
 
             return true;
         });
-
     }
 
     private void replaceFragment(Fragment toReplace) {

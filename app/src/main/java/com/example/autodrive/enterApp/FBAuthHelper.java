@@ -1,8 +1,14 @@
 package com.example.autodrive.enterApp;
 
+import static com.example.autodrive.MainActivity.EMAIL_KEY;
+import static com.example.autodrive.MainActivity.PASSWORD_KEY;
+
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,24 +24,29 @@ public class FBAuthHelper {
     private FirebaseAuth mAuth;
     private FBReply fbReplay;
 
-    public interface FBReply{
+    public interface FBReply {
         public void createUserSuccsess(FirebaseUser user);
+
         public void loginSuccsess(FirebaseUser user);
     }
 
-    public FBAuthHelper( Activity activity, FBReply fbReplay) {
+    public FBAuthHelper(Activity activity, FBReply fbReplay) {
         mAuth = FirebaseAuth.getInstance();
         this.fbReplay = fbReplay;
         this.activity = activity;
-
     }
 
-    public FirebaseUser getCurrentUser(){return mAuth.getCurrentUser();}
-    public Boolean isLoggedIn(){return getCurrentUser()!=null;}
+    public FirebaseUser getCurrentUser() {
+        return mAuth.getCurrentUser();
+    }
 
-    public void createUser(String email, String password){
+    public Boolean isLoggedIn() {
+        return getCurrentUser() != null;
+    }
+
+    public void createUser(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(activity,(OnCompleteListener<AuthResult>) new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(activity, (OnCompleteListener<AuthResult>) new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -53,7 +64,7 @@ public class FBAuthHelper {
                 });
     }
 
-    public void login(String email, String password) {
+    public void login(String email, String password, Context context) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -62,6 +73,13 @@ public class FBAuthHelper {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            SharedPreferences prefs = context.getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putString(EMAIL_KEY, email);
+                            editor.putString(PASSWORD_KEY, password);
+                            editor.apply();
+
                             fbReplay.loginSuccsess(user);
                         } else {
                             // If sign in fails, display a message to the user.
