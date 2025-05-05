@@ -2,6 +2,8 @@ package com.example.autodrive.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,13 +15,15 @@ import android.widget.Toast;
 import com.example.autodrive.R;
 import com.example.autodrive.views.itemExpanse.ExpenseItem;
 import com.example.autodrive.views.itemExpanse.FireStoreExpanseHelper;
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class ExpenseManagerFragment extends Fragment{
 
-    private EditText tvAmount, tvDateExpanse, tvDescription;
-    private Button btn_add_payment;
+    private EditText tvAmount, tvDateExpanse, tvDescription, counterET;
+    private Button btn_add_payment, btn_counter;
     private FireStoreExpanseHelper fireStoreExpanseHelper;
     @SuppressLint("MissingInflatedId")
     @Override
@@ -32,8 +36,28 @@ public class ExpenseManagerFragment extends Fragment{
         tvDateExpanse = rootView.findViewById(R.id.payment_date_input);
         tvDescription = rootView.findViewById(R.id.describe_input);
         btn_add_payment = rootView.findViewById(R.id.btn_add_payment);
-
         btn_add_payment.setOnClickListener(v -> addPayment());
+        // Save when button is clicked
+
+        // Counter things
+        counterET = rootView.findViewById(R.id.counterET);
+        btn_counter = rootView.findViewById(R.id.btn_counter);
+
+        // Get current user ID
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        // Save counter value per user
+        btn_counter.setOnClickListener(view -> {
+            String text = counterET.getText().toString();
+            SharedPreferences prefs = getContext().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+            prefs.edit().putString("editTextValue_" + userId, text).apply();
+            Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
+        });
+
+        // Load saved value on screen load for this user
+        SharedPreferences prefs = getContext().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+        String savedText = prefs.getString("editTextValue_" + userId, "");
+        counterET.setText(savedText);
+
 
         fireStoreExpanseHelper = new FireStoreExpanseHelper(this); // Initialize helper
 
