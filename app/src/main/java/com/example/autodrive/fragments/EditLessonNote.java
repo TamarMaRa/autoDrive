@@ -52,6 +52,7 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
     public EditLessonNote() {
         fireStoreLessonHelper = new FireStoreLessonHelper(this);
     }
+
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -73,9 +74,8 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
         checkNotificationPermission();
         btn_add_reminder.setOnClickListener(v -> showDateTimePickerDialog());
 
-        // ⬇️ Added code to show DatePickerDialog on clicking dateInput
+        // ⬇️ Date Picker for dateInput
         dateInput.setInputType(android.text.InputType.TYPE_NULL); // prevent keyboard from showing
-
         dateInput.setOnClickListener(v -> {
             final Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
@@ -83,18 +83,31 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
             int day = calendar.get(Calendar.DAY_OF_MONTH);
 
             DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), (view, year1, month1, dayOfMonth) -> {
-                // Format and set date
                 String selectedDate = dayOfMonth + "/" + (month1 + 1) + "/" + year1;
                 dateInput.setText(selectedDate);
             }, year, month, day);
 
             datePickerDialog.show();
         });
-        // ⬆️ End of added code
+
+        // ⬇️ Time Picker for timeInput (NEW)
+        timeInput.setInputType(android.text.InputType.TYPE_NULL); // prevent keyboard from showing
+        timeInput.setOnClickListener(v -> {
+            final Calendar calendar = Calendar.getInstance();
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minute = calendar.get(Calendar.MINUTE);
+
+            TimePickerDialog timePickerDialog = new TimePickerDialog(requireContext(),
+                    (view, hourOfDay, minuteOfHour) -> {
+                        String formattedTime = String.format("%02d:%02d", hourOfDay, minuteOfHour);
+                        timeInput.setText(formattedTime);
+                    }, hour, minute, true);
+
+            timePickerDialog.show();
+        });
 
         return rootView;
     }
-
 
     private void addLesson() {
         String lessonNumberStr = lessonNumberInput.getText().toString().trim();
