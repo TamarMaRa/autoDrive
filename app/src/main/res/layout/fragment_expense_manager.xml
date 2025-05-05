@@ -115,6 +115,8 @@
             android:textSize="70sp"
             android:textStyle="bold"
             />
+
+
     </LinearLayout>
 
     <Button

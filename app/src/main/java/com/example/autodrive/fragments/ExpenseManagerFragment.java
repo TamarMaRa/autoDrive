@@ -39,7 +39,7 @@ public class ExpenseManagerFragment extends Fragment{
         btn_add_payment.setOnClickListener(v -> addPayment());
         // Save when button is clicked
 
-        // Counter things
+        // Counter
         counterET = rootView.findViewById(R.id.counterET);
         btn_counter = rootView.findViewById(R.id.btn_counter);
 

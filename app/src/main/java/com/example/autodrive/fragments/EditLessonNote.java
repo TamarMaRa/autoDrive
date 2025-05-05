@@ -11,6 +11,7 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,14 +33,15 @@ import com.example.autodrive.R;
 import com.example.autodrive.alarm.AlarmReceiver;
 import com.example.autodrive.views.itemLesson.FireStoreLessonHelper;
 import com.example.autodrive.views.itemLesson.LessonItem;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FBReply {
 
-    private EditText lessonNumberInput, dateInput, timeInput;
-    private Button btnAddLesson, btn_add_reminder;
+    private EditText lessonNumberInput, dateInput, timeInput, counterET;
+    private Button btnAddLesson, btn_add_reminder, btn_counter;
     private FireStoreLessonHelper fireStoreLessonHelper;
     private TextView dateText;
     private Calendar alarmCalendar;
@@ -66,6 +68,30 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
         btnAddLesson = rootView.findViewById(R.id.btn_add_event);
         btn_add_reminder = rootView.findViewById(R.id.btn_add_reminder);
         dateText = rootView.findViewById(R.id.dateText);
+
+        // CounterET2 logic (unique per user and screen)
+        counterET = rootView.findViewById(R.id.counterET2);
+        btn_counter = rootView.findViewById(R.id.btn_counter2);
+
+// Get current user ID
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+// Unique key for this specific screen's counter
+        String counterKey = "editTextValue_lessonNoteCounter_" + userId;
+
+// Save counter value
+        btn_counter.setOnClickListener(view -> {
+            String text = counterET.getText().toString();
+            SharedPreferences prefs = requireContext().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+            prefs.edit().putString(counterKey, text).apply();
+            Toast.makeText(requireContext(), "Saved", Toast.LENGTH_SHORT).show();
+        });
+
+// Load saved counter value
+        SharedPreferences prefs = requireContext().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+        String savedText = prefs.getString(counterKey, "");
+        counterET.setText(savedText);
+
 
         btnAddLesson.setOnClickListener(v -> addLesson());
         alarmCalendar = Calendar.getInstance();
@@ -108,6 +134,8 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
 
         return rootView;
     }
+
+
 
     private void addLesson() {
         String lessonNumberStr = lessonNumberInput.getText().toString().trim();
