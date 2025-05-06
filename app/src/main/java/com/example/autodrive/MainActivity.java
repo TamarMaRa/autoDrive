@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.autodrive.enterApp.FBAuthHelper;
+import com.example.autodrive.views.itemExpanse.PaidLessonsManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements FBAuthHelper.FBRe
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
+        PaidLessonsManager.init();
 
         etEmail = findViewById(R.id.email_input);
         etPwd = findViewById(R.id.password_input);

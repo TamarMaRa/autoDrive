@@ -50,3 +50,8 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.firebase.ui.firestore) // For Firestore UI
 }
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}

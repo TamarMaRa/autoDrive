@@ -89,6 +89,11 @@ public class ExpanseAdapter extends FirestoreRecyclerAdapter<ExpenseItem, Expans
                 String docId = this.getSnapshots().getSnapshot(position).getId();
                 holder.showDeleteConfirmationDialog(docId);
             }
+
+            PaidLessonsManager.getInstance().getPaidLessonsNumber(value -> {
+                PaidLessonsManager.getInstance().updateNumberOfLessonsPaid(value - Integer.parseInt(holder.discriptionExpanseTV.getText().toString()));
+            });
+
             return true;
         });
     }

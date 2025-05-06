@@ -5,26 +5,31 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.example.autodrive.R;
 import com.example.autodrive.views.itemExpanse.ExpenseItem;
 import com.example.autodrive.views.itemExpanse.FireStoreExpanseHelper;
+import com.example.autodrive.views.itemExpanse.PaidLessonsManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class ExpenseManagerFragment extends Fragment{
+public class ExpenseManagerFragment extends Fragment {
 
     private EditText tvAmount, tvDateExpanse, tvDescription, counterET;
     private Button btn_add_payment;
     private FireStoreExpanseHelper fireStoreExpanseHelper;
+
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,7 +42,6 @@ public class ExpenseManagerFragment extends Fragment{
         tvDescription = rootView.findViewById(R.id.describe_input);
         btn_add_payment = rootView.findViewById(R.id.btn_add_payment);
         btn_add_payment.setOnClickListener(v -> addPayment());
-        // Save when button is clicked
 
         // Counter
         counterET = rootView.findViewById(R.id.counterET);
@@ -69,10 +73,14 @@ public class ExpenseManagerFragment extends Fragment{
 
             datePickerDialog.show();
         });
-        // ⬆️ End of date picker addition
+
+        PaidLessonsManager.getInstance().getPaidLessonsNumber(value -> {
+            counterET.setText(String.valueOf(value));
+        });
 
         return rootView;
     }
+
     private void addPayment() {
         String amountStr = tvAmount.getText().toString().trim();
         String dateExpanse = tvDateExpanse.getText().toString().trim();
@@ -86,6 +94,12 @@ public class ExpenseManagerFragment extends Fragment{
         int expense = Integer.parseInt(amountStr);
         ExpenseItem newExpense = new ExpenseItem(expense, dateExpanse, description);
         saveExpense(newExpense);
+
+        PaidLessonsManager.getInstance().getPaidLessonsNumber(value -> {
+            PaidLessonsManager.getInstance().updateNumberOfLessonsPaid(value + Integer.parseInt(description));
+            counterET.setText(String.valueOf(value + Integer.parseInt(description)));
+        });
+
 
         Toast.makeText(getContext(), "Expense added!", Toast.LENGTH_SHORT).show();
     }

@@ -56,7 +56,8 @@
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:background="@drawable/backround_white"
-        android:hint="Describe payment:"
+        android:hint="Amount of lessons:"
+        android:inputType="number"
         android:textColorHint="@color/dark_green"
         android:padding="12dp" />
     <EditText
