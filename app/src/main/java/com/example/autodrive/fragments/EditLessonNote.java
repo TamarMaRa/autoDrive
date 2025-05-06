@@ -4,9 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -16,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -34,6 +31,8 @@ import com.example.autodrive.alarm.AlarmReceiver;
 import com.example.autodrive.views.itemLesson.FireStoreLessonHelper;
 import com.example.autodrive.views.itemLesson.LessonItem;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -132,10 +131,36 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
             timePickerDialog.show();
         });
 
+        updateNumLessons();
+
         return rootView;
     }
 
+    private void updateNumLessons() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        db.collection("users").document(currentUser.getUid()).collection("my_lessons")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    int itemCount = queryDocumentSnapshots.size();
+                    Log.d("ItemCount", "Total items: " + itemCount);
+
+                    counterET.setText(String.valueOf(itemCount));
+                    lessonNumberInput.setText(String.valueOf(itemCount + 1));
+                    lessonNumberInput.setEnabled(false);
+
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("FirestoreError", "Error getting documents: ", e);
+
+                    counterET.setText(String.valueOf(0));
+                    lessonNumberInput.setText(String.valueOf(1));
+                    lessonNumberInput.setEnabled(false);
+
+                });
+
+    }
 
     private void addLesson() {
         String lessonNumberStr = lessonNumberInput.getText().toString().trim();
@@ -155,6 +180,8 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
         } catch (NumberFormatException e) {
             Toast.makeText(requireContext(), "Invalid lesson number", Toast.LENGTH_SHORT).show();
         }
+
+        updateNumLessons();
     }
 
     private void saveLesson(LessonItem lesson) {
@@ -233,7 +260,7 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
                 pendingIntent
         );
 
-        Toast.makeText(requireContext(),"Alarm set for: " + alarmCalendar.getTime(), Toast.LENGTH_LONG).show();
+        Toast.makeText(requireContext(), "Alarm set for: " + alarmCalendar.getTime(), Toast.LENGTH_LONG).show();
     }
 
     // Permission Handling
@@ -273,8 +300,10 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
 
     // FireStore callbacks
     @Override
-    public void getAllSuccess(ArrayList<LessonItem> lessons) {}
+    public void getAllSuccess(ArrayList<LessonItem> lessons) {
+    }
 
     @Override
-    public void getOneSuccess(LessonItem lesson) {}
+    public void getOneSuccess(LessonItem lesson) {
+    }
 }
