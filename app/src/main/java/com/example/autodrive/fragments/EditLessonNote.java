@@ -40,7 +40,7 @@ import java.util.Calendar;
 public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FBReply {
 
     private EditText lessonNumberInput, dateInput, timeInput, counterET;
-    private Button btnAddLesson, btn_add_reminder, btn_counter;
+    private Button btnAddLesson, btn_add_reminder;
     private FireStoreLessonHelper fireStoreLessonHelper;
     private TextView dateText;
     private Calendar alarmCalendar;
@@ -70,7 +70,6 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
 
         // CounterET2 logic (unique per user and screen)
         counterET = rootView.findViewById(R.id.counterET2);
-        btn_counter = rootView.findViewById(R.id.btn_counter2);
 
 // Get current user ID
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -78,13 +77,6 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
 // Unique key for this specific screen's counter
         String counterKey = "editTextValue_lessonNoteCounter_" + userId;
 
-// Save counter value
-        btn_counter.setOnClickListener(view -> {
-            String text = counterET.getText().toString();
-            SharedPreferences prefs = requireContext().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
-            prefs.edit().putString(counterKey, text).apply();
-            Toast.makeText(requireContext(), "Saved", Toast.LENGTH_SHORT).show();
-        });
 
 // Load saved counter value
         SharedPreferences prefs = requireContext().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);

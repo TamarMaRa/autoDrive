@@ -23,7 +23,7 @@ import java.util.Calendar;
 public class ExpenseManagerFragment extends Fragment{
 
     private EditText tvAmount, tvDateExpanse, tvDescription, counterET;
-    private Button btn_add_payment, btn_counter;
+    private Button btn_add_payment;
     private FireStoreExpanseHelper fireStoreExpanseHelper;
     @SuppressLint("MissingInflatedId")
     @Override
@@ -41,17 +41,9 @@ public class ExpenseManagerFragment extends Fragment{
 
         // Counter
         counterET = rootView.findViewById(R.id.counterET);
-        btn_counter = rootView.findViewById(R.id.btn_counter);
 
         // Get current user ID
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        // Save counter value per user
-        btn_counter.setOnClickListener(view -> {
-            String text = counterET.getText().toString();
-            SharedPreferences prefs = getContext().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
-            prefs.edit().putString("editTextValue_" + userId, text).apply();
-            Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
-        });
 
         // Load saved value on screen load for this user
         SharedPreferences prefs = getContext().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
