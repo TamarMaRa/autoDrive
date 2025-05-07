@@ -27,7 +27,7 @@ public class ExpensesListFragment extends Fragment {
     private FireStoreExpanseHelper expanseHelper;
 
     public ExpensesListFragment() {
-        // Required empty public constructor
+        // Default constructor
     }
 
     @SuppressLint("MissingInflatedId")
@@ -36,6 +36,7 @@ public class ExpensesListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_expenses_list, container, false);
 
+        // Initialize RecyclerView and layout
         recyclerView = view.findViewById(R.id.rvExpense);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         setupRecyclerView();
@@ -44,13 +45,16 @@ public class ExpensesListFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
+        // Query Firestore collection ordered by date descending
         Query query = expanseHelper.getCollectionRef()
                 .orderBy("date", Query.Direction.DESCENDING);
 
+        // Configure adapter with Firestore query results
         FirestoreRecyclerOptions<ExpenseItem> options = new FirestoreRecyclerOptions.Builder<ExpenseItem>()
                 .setQuery(query, ExpenseItem.class)
                 .build();
 
+        // Initialize adapter and attach it to RecyclerView
         expanseAdapter = new ExpanseAdapter(options, requireContext(), false);
         recyclerView.setAdapter(expanseAdapter);
     }
@@ -58,18 +62,21 @@ public class ExpensesListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        // Start listening for real-time updates when fragment is visible
         expanseAdapter.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        // Stop listening to prevent memory leaks
         expanseAdapter.stopListening();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        // Refresh UI when fragment resumes
         expanseAdapter.notifyDataSetChanged();
     }
 }

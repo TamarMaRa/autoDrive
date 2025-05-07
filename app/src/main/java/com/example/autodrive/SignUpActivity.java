@@ -21,26 +21,31 @@ public class SignUpActivity extends AppCompatActivity implements FBAuthHelper.FB
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_up);
 
+        // Initialize views and helpers
         initializeViews();
         setupAuthHelper();
         setupSignUpButton();
     }
 
+    // Finds and assigns EditText views
     private void initializeViews() {
         etEmail = findViewById(R.id.email_input);
         etPwd = findViewById(R.id.password_input);
         etPwd2 = findViewById(R.id.confirm_password_input);
     }
 
+    // Creates Firebase auth helper instance
     private void setupAuthHelper() {
         fbAuthHelper = new FBAuthHelper(this, this);
     }
 
+    // Sets click listener for the sign-up button
     private void setupSignUpButton() {
         Button btnSignUp = findViewById(R.id.btnSignUp);
         btnSignUp.setOnClickListener(v -> attemptSignUp());
     }
 
+    // Attempts to create a new user with provided credentials
     private void attemptSignUp() {
         clearErrors();
 
@@ -53,6 +58,7 @@ public class SignUpActivity extends AppCompatActivity implements FBAuthHelper.FB
         fbAuthHelper.createUser(email, password);
     }
 
+    // Validates email and password fields
     private boolean isInputValid(String email, String password, String confirmPassword) {
         if (email.isEmpty()) {
             etEmail.setError("Email required");
@@ -82,17 +88,19 @@ public class SignUpActivity extends AppCompatActivity implements FBAuthHelper.FB
         return true;
     }
 
+    // Clears previous error messages from input fields
     private void clearErrors() {
         etEmail.setError(null);
         etPwd.setError(null);
         etPwd2.setError(null);
     }
 
+    // Called when sign-up fails
     public void authError(String errorMessage) {
         Toast.makeText(this, "Sign up failed: " + errorMessage, Toast.LENGTH_LONG).show();
     }
 
-
+    // Called when sign-up is successful
     @Override
     public void createUserSuccsess(FirebaseUser user) {
         Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show();
@@ -100,8 +108,8 @@ public class SignUpActivity extends AppCompatActivity implements FBAuthHelper.FB
         finish();
     }
 
+    // Not used here, but required by the interface
     @Override
     public void loginSuccsess(FirebaseUser user) {
-
     }
 }

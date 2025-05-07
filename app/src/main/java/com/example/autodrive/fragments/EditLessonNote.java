@@ -45,12 +45,13 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
     private TextView dateText;
     private Calendar alarmCalendar;
 
-    // Notification constants
+    // Constants for notifications
     public static final String CHANNEL_ID = "LESSON_REMINDER_CHANNEL";
     public static final int NOTIFICATION_ID = 123;
     private static final int REQUEST_NOTIFICATION_PERMISSION = 1001;
 
     public EditLessonNote() {
+        // Initialize Firestore helper with this fragment as callback
         fireStoreLessonHelper = new FireStoreLessonHelper(this);
     }
 
@@ -60,74 +61,68 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_edit_lesson_note, container, false);
 
-        // Initialize UI components
+        // Initialize views
         lessonNumberInput = rootView.findViewById(R.id.lesson_number_input);
         dateInput = rootView.findViewById(R.id.date_input);
         timeInput = rootView.findViewById(R.id.time_input);
         btnAddLesson = rootView.findViewById(R.id.btn_add_event);
         btn_add_reminder = rootView.findViewById(R.id.btn_add_reminder);
         dateText = rootView.findViewById(R.id.dateText);
-
-        // CounterET2 logic (unique per user and screen)
         counterET = rootView.findViewById(R.id.counterET2);
 
-// Get current user ID
+        // Restore saved lesson counter (user-specific)
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-// Unique key for this specific screen's counter
         String counterKey = "editTextValue_lessonNoteCounter_" + userId;
-
-
-// Load saved counter value
         SharedPreferences prefs = requireContext().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
         String savedText = prefs.getString(counterKey, "");
         counterET.setText(savedText);
 
-
+        // Set button actions
         btnAddLesson.setOnClickListener(v -> addLesson());
         alarmCalendar = Calendar.getInstance();
-
         checkExactAlarmPermission();
         checkNotificationPermission();
         btn_add_reminder.setOnClickListener(v -> showDateTimePickerDialog());
 
-        // ⬇️ Date Picker for dateInput
-        dateInput.setInputType(android.text.InputType.TYPE_NULL); // prevent keyboard from showing
+        // Set up date picker
+        dateInput.setInputType(android.text.InputType.TYPE_NULL); // disable keyboard
         dateInput.setOnClickListener(v -> {
             final Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), (view, year1, month1, dayOfMonth) -> {
-                String selectedDate = dayOfMonth + "/" + (month1 + 1) + "/" + year1;
+            DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), (view, y, m, d) -> {
+                String selectedDate = d + "/" + (m + 1) + "/" + y;
                 dateInput.setText(selectedDate);
             }, year, month, day);
 
             datePickerDialog.show();
         });
 
-        // ⬇️ Time Picker for timeInput (NEW)
-        timeInput.setInputType(android.text.InputType.TYPE_NULL); // prevent keyboard from showing
+        // Set up time picker
+        timeInput.setInputType(android.text.InputType.TYPE_NULL); // disable keyboard
         timeInput.setOnClickListener(v -> {
             final Calendar calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int minute = calendar.get(Calendar.MINUTE);
 
             TimePickerDialog timePickerDialog = new TimePickerDialog(requireContext(),
-                    (view, hourOfDay, minuteOfHour) -> {
-                        String formattedTime = String.format("%02d:%02d", hourOfDay, minuteOfHour);
+                    (view, h, m) -> {
+                        String formattedTime = String.format("%02d:%02d", h, m);
                         timeInput.setText(formattedTime);
                     }, hour, minute, true);
 
             timePickerDialog.show();
         });
 
+        // Load and display current number of lessons
         updateNumLessons();
 
         return rootView;
     }
 
+    // Gets lesson count and auto-fills lesson number
     private void updateNumLessons() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -137,23 +132,19 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     int itemCount = queryDocumentSnapshots.size();
                     Log.d("ItemCount", "Total items: " + itemCount);
-
                     counterET.setText(String.valueOf(itemCount));
                     lessonNumberInput.setText(String.valueOf(itemCount + 1));
                     lessonNumberInput.setEnabled(false);
-
                 })
                 .addOnFailureListener(e -> {
                     Log.e("FirestoreError", "Error getting documents: ", e);
-
-                    counterET.setText(String.valueOf(0));
-                    lessonNumberInput.setText(String.valueOf(1));
+                    counterET.setText("0");
+                    lessonNumberInput.setText("1");
                     lessonNumberInput.setEnabled(false);
-
                 });
-
     }
 
+    // Adds a new lesson after input validation
     private void addLesson() {
         String lessonNumberStr = lessonNumberInput.getText().toString().trim();
         String date = dateInput.getText().toString().trim();
@@ -176,11 +167,12 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
         updateNumLessons();
     }
 
+    // Saves lesson to Firestore
     private void saveLesson(LessonItem lesson) {
         fireStoreLessonHelper.add(lesson);
     }
 
-    // Date/Time Picker Methods
+    // Launches date and time picker to set reminder
     private void showDateTimePickerDialog() {
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -188,30 +180,29 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(),
-                (view, selectedYear, selectedMonth, selectedDay) ->
-                        showTimePickerDialog(selectedYear, selectedMonth, selectedDay),
+                (view, y, m, d) -> showTimePickerDialog(y, m, d),
                 year, month, day);
         datePickerDialog.show();
     }
 
+    // Shows time picker after date is selected
     private void showTimePickerDialog(final int year, final int month, final int dayOfMonth) {
         final Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(requireContext(),
-                (view, hourOfDay, minuteOfHour) -> {
-                    alarmCalendar.set(year, month, dayOfMonth, hourOfDay, minuteOfHour, 0);
-                    String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year + " " + hourOfDay + ":" + minuteOfHour;
+                (view, h, m) -> {
+                    alarmCalendar.set(year, month, dayOfMonth, h, m, 0);
+                    String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year + " " + h + ":" + m;
                     dateText.setText(selectedDate);
                     setAlarm(alarmCalendar);
                 }, hour, minute, true);
         timePickerDialog.show();
     }
 
-    // Alarm and Notification Methods
+    // Schedules an alarm at the selected date/time
     private void setAlarm(Calendar alarmCalendar) {
-        // Add validation for future time
         Calendar now = Calendar.getInstance();
         if (alarmCalendar.before(now)) {
             Toast.makeText(requireContext(), "Cannot set alarm for past time", Toast.LENGTH_SHORT).show();
@@ -220,42 +211,29 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
 
         AlarmManager alarmManager = (AlarmManager) requireContext().getSystemService(Context.ALARM_SERVICE);
 
-        // Create intent with lesson details
         Intent intent = new Intent(requireContext(), AlarmReceiver.class);
         intent.putExtra("LESSON_NUMBER", lessonNumberInput.getText().toString());
         intent.putExtra("LESSON_TIME", dateInput.getText() + " " + timeInput.getText());
 
-        // Create pending intent
         int flags = PendingIntent.FLAG_UPDATE_CURRENT;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             flags |= PendingIntent.FLAG_IMMUTABLE;
         }
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                requireContext(),
-                0,
-                intent,
-                flags
-        );
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, intent, flags);
 
-        // Set the alarm
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (!alarmManager.canScheduleExactAlarms()) {
-                Toast.makeText(requireContext(), "Permission required to set exact alarms.", Toast.LENGTH_SHORT).show();
-                return;
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+            Toast.makeText(requireContext(), "Permission required to set exact alarms.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                alarmCalendar.getTimeInMillis(),
-                pendingIntent
-        );
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
+                alarmCalendar.getTimeInMillis(), pendingIntent);
 
         Toast.makeText(requireContext(), "Alarm set for: " + alarmCalendar.getTime(), Toast.LENGTH_LONG).show();
     }
 
-    // Permission Handling
+    // Requests permission for exact alarms if needed (Android 12+)
     private void checkExactAlarmPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             AlarmManager alarmManager = (AlarmManager) requireContext().getSystemService(Context.ALARM_SERVICE);
@@ -268,34 +246,31 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
         }
     }
 
+    // Requests notification permission if needed (Android 13+)
     private void checkNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(requireContext(),
-                    Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS)
+                        != PackageManager.PERMISSION_GRANTED) {
 
-                requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},
-                        REQUEST_NOTIFICATION_PERMISSION);
-            }
+            requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_NOTIFICATION_PERMISSION);
         }
     }
 
+    // Handles permission result
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_NOTIFICATION_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(requireContext(), "Notifications disabled", Toast.LENGTH_SHORT).show();
-            }
+        if (requestCode == REQUEST_NOTIFICATION_PERMISSION &&
+                grantResults.length > 0 &&
+                grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(requireContext(), "Notifications disabled", Toast.LENGTH_SHORT).show();
         }
     }
 
-    // FireStore callbacks
+    // Firestore callbacks (not used in this screen)
     @Override
-    public void getAllSuccess(ArrayList<LessonItem> lessons) {
-    }
-
+    public void getAllSuccess(ArrayList<LessonItem> lessons) {}
     @Override
-    public void getOneSuccess(LessonItem lesson) {
-    }
+    public void getOneSuccess(LessonItem lesson) {}
 }

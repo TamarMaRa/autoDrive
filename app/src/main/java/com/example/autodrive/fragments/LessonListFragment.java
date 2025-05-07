@@ -24,52 +24,57 @@ public class LessonListFragment extends Fragment {
     private LessonAdapter lessonAdapter;
 
     public LessonListFragment() {
-        // Required empty public constructor
+        // Default constructor
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_lesson_list, container, false);
 
-        recyclerView = view.findViewById(R.id.rvNotes); // Make sure this matches the XML ID
+        // Initialize RecyclerView and set layout manager
+        recyclerView = view.findViewById(R.id.rvNotes);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        setupRecyclerView();
+        setupRecyclerView(); // Set up the adapter and query
         return view;
     }
 
     private void setupRecyclerView() {
+        // Query lessons from Firestore, ordered by lesson number (descending)
         Query query = FireStoreLessonHelper.getCollectionRef()
                 .orderBy("numLesson", Query.Direction.DESCENDING);
 
+        // Build FirestoreRecyclerOptions with query and LessonItem class
         FirestoreRecyclerOptions<LessonItem> options = new FirestoreRecyclerOptions.Builder<LessonItem>()
                 .setQuery(query, LessonItem.class)
                 .build();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext())); // Use requireContext() instead of "this"
-        lessonAdapter = new LessonAdapter(options, getContext(),false);
+        // Initialize adapter with Firestore options
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        lessonAdapter = new LessonAdapter(options, getContext(), false);
         recyclerView.setAdapter(lessonAdapter);
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        // Start listening to Firestore data when fragment becomes visible
         lessonAdapter.startListening();
-
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        // Stop listening to Firestore to avoid memory leaks
         lessonAdapter.stopListening();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        // Refresh the RecyclerView on resume
         lessonAdapter.notifyDataSetChanged();
-
     }
-
 }

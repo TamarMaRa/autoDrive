@@ -36,30 +36,29 @@ public class ExpenseManagerFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_expense_manager, container, false);
 
-        // Find UI components
+        // Initialize UI components
         tvAmount = rootView.findViewById(R.id.expanses_input);
         tvDateExpanse = rootView.findViewById(R.id.payment_date_input);
         tvDescription = rootView.findViewById(R.id.describe_input);
         btn_add_payment = rootView.findViewById(R.id.btn_add_payment);
-        btn_add_payment.setOnClickListener(v -> addPayment());
-
-        // Counter
         counterET = rootView.findViewById(R.id.counterET);
+
+        // Set click listener for "Add Payment" button
+        btn_add_payment.setOnClickListener(v -> addPayment());
 
         // Get current user ID
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        // Load saved value on screen load for this user
+        // Load previously saved counter value for this user
         SharedPreferences prefs = getContext().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
         String savedText = prefs.getString("editTextValue_" + userId, "");
         counterET.setText(savedText);
 
+        // Initialize Firestore helper
+        fireStoreExpanseHelper = new FireStoreExpanseHelper(this);
 
-        fireStoreExpanseHelper = new FireStoreExpanseHelper(this); // Initialize helper
-
-        // ⬇️ Added date picker on tvDateExpanse click
-        tvDateExpanse.setInputType(android.text.InputType.TYPE_NULL); // Disable keyboard
-
+        // Disable keyboard on date input and show DatePicker instead
+        tvDateExpanse.setInputType(android.text.InputType.TYPE_NULL);
         tvDateExpanse.setOnClickListener(v -> {
             final Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
@@ -74,6 +73,7 @@ public class ExpenseManagerFragment extends Fragment {
             datePickerDialog.show();
         });
 
+        // Retrieve current number of paid lessons and display it in counter
         PaidLessonsManager.getInstance().getPaidLessonsNumber(value -> {
             counterET.setText(String.valueOf(value));
         });
@@ -82,24 +82,27 @@ public class ExpenseManagerFragment extends Fragment {
     }
 
     private void addPayment() {
+        // Get input values
         String amountStr = tvAmount.getText().toString().trim();
         String dateExpanse = tvDateExpanse.getText().toString().trim();
         String description = tvDescription.getText().toString().trim();
 
+        // Validate input
         if (amountStr.isEmpty() || dateExpanse.isEmpty() || description.isEmpty()) {
             Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Create expense object and save it
         int expense = Integer.parseInt(amountStr);
         ExpenseItem newExpense = new ExpenseItem(expense, dateExpanse, description);
         saveExpense(newExpense);
 
+        // Update the number of paid lessons (description should be a number here)
         PaidLessonsManager.getInstance().getPaidLessonsNumber(value -> {
             PaidLessonsManager.getInstance().updateNumberOfLessonsPaid(value + Integer.parseInt(description));
             counterET.setText(String.valueOf(value + Integer.parseInt(description)));
         });
-
 
         Toast.makeText(getContext(), "Expense added!", Toast.LENGTH_SHORT).show();
     }
@@ -108,12 +111,10 @@ public class ExpenseManagerFragment extends Fragment {
         fireStoreExpanseHelper.add(expenseItem);
     }
 
-
+    // Firestore callback (if needed later)
     public void getAllSuccess(ArrayList<ExpenseItem> expenseItems) {
-        // Handle the success case where you get all expenses
     }
 
     public void getOneSuccess(ExpenseItem expenseItem) {
-        // Handle the success case where you get a single expense
     }
 }
