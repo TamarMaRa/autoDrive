@@ -29,7 +29,7 @@ public class AlarmManager extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_edit_lesson_note); // Loads layout with the date picker and button
+        setContentView(R.layout.fragment_lesson_manager_note); // Loads layout with the date picker and button
 
         checkExactAlarmPermission(); // Ensures the app has permission to set exact alarms on Android 12+
 

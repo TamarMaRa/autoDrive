@@ -115,7 +115,7 @@
                     android:layout_width="70dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:text="save"
+                    android:text="✔️"
                     android:textSize="15dp"
                     android:backgroundTint="@color/dark_green"
                     android:visibility="gone"/>
@@ -125,7 +125,7 @@
                     android:layout_height="40dp"
                     android:layout_weight="1"
                     android:layout_marginLeft="15dp"
-                    android:text="delete"
+                    android:text="❌"
                     android:textSize="15dp"
                     android:backgroundTint="@color/dark_green"
                     android:visibility="gone"/>

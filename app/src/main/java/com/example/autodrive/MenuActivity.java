@@ -20,11 +20,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.example.autodrive.databinding.ActivityMainBinding;
 import com.example.autodrive.fragments.ExpenseManagerFragment;
-import com.example.autodrive.fragments.EditLessonNote;
+import com.example.autodrive.fragments.LessonManagerFragment;
 import com.example.autodrive.fragments.ExpensesListFragment;
 import com.example.autodrive.fragments.LessonListFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MenuActivity extends AppCompatActivity {
@@ -52,13 +51,13 @@ public class MenuActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        replaceFragment(new EditLessonNote());
+        replaceFragment(new LessonManagerFragment());
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
             switch (item.getItemId()) {
                 case R.id.nav_time: {
-                    replaceFragment(new EditLessonNote());
+                    replaceFragment(new LessonManagerFragment());
                     break;
                 }
                 case R.id.nav_time_list: {

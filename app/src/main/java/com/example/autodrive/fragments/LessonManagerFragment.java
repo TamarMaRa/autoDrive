@@ -37,7 +37,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FBReply {
+public class LessonManagerFragment extends Fragment implements FireStoreLessonHelper.FBReply {
 
     private EditText lessonNumberInput, dateInput, timeInput, counterET;
     private Button btnAddLesson, btn_add_reminder;
@@ -50,7 +50,7 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
     public static final int NOTIFICATION_ID = 123;
     private static final int REQUEST_NOTIFICATION_PERMISSION = 1001;
 
-    public EditLessonNote() {
+    public LessonManagerFragment() {
         // Initialize Firestore helper with this fragment as callback
         fireStoreLessonHelper = new FireStoreLessonHelper(this);
     }
@@ -59,7 +59,7 @@ public class EditLessonNote extends Fragment implements FireStoreLessonHelper.FB
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_edit_lesson_note, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_lesson_manager_note, container, false);
 
         // Initialize views
         lessonNumberInput = rootView.findViewById(R.id.lesson_number_input);

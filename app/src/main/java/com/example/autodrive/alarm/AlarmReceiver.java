@@ -8,15 +8,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
-import com.example.autodrive.MainActivity;
 import com.example.autodrive.R;
-import com.example.autodrive.fragments.EditLessonNote;
-
-import java.util.Calendar;
+import com.example.autodrive.fragments.LessonManagerFragment;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
@@ -33,7 +29,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     private void createNotificationChannel(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
-                    EditLessonNote.CHANNEL_ID,
+                    LessonManagerFragment.CHANNEL_ID,
                     "Lesson Reminders",
                     NotificationManager.IMPORTANCE_HIGH
             );
@@ -63,7 +59,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         );
 
         // Build the notification with the given title, content, and styling
-        Notification notification = new NotificationCompat.Builder(context, EditLessonNote.CHANNEL_ID)
+        Notification notification = new NotificationCompat.Builder(context, LessonManagerFragment.CHANNEL_ID)
                 .setSmallIcon(R.drawable.icons_green_car) // Set the notification icon
                 .setContentTitle(title) // Set the notification title
                 .setContentText(content) // Set the notification content
@@ -76,6 +72,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         // Get the NotificationManager and issue the notification
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(EditLessonNote.NOTIFICATION_ID, notification);
+        manager.notify(LessonManagerFragment.NOTIFICATION_ID, notification);
     }
 }
