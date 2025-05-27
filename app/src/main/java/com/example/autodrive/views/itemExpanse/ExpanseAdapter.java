@@ -50,39 +50,39 @@ public class ExpanseAdapter extends FirestoreRecyclerAdapter<ExpenseItem, Expans
         // Setup save button listener to save the updated expense
         holder.saveButton.setOnClickListener(v -> {
             try {
-                // Safely extract and parse the entered amount value
                 String rawAmount = holder.amountTV.getText().toString().trim();
-                int numExpanse = Integer.parseInt(rawAmount);
+                int newAmount = Integer.parseInt(rawAmount);
+                int oldAmount = expenseItem.getExpense();
 
-                // Create an updated expense object to save
                 ExpenseItem updatedExpanse = new ExpenseItem(
-                        numExpanse,
+                        newAmount,
                         holder.dateExpanseTV.getText().toString(),
                         holder.discriptionExpanseTV.getText().toString()
                 );
 
-                // Retrieve the Firestore document ID for this item
                 String expenseID = getSnapshots().getSnapshot(position).getId();
                 Log.d("ExpanseAdapter", "Saving expanse with ID: " + expenseID);
 
-                // Update the expense in Firestore
+                // Update Firestore
                 FireStoreExpanseHelper helper = new FireStoreExpanseHelper(null);
-                helper.update(expenseID, updatedExpanse); // Update the document in Firestore
+                helper.update(expenseID, updatedExpanse);
 
-                // Disable editing mode and show a toast for feedback
+                // Update money spent tracker
+                MoneySpentManager.getInstance().getMoneySpent(current -> {
+                    int updatedTotal = current - oldAmount + newAmount;
+                    MoneySpentManager.getInstance().updateMoneySpent(Math.max(updatedTotal, 0));
+                });
+
                 holder.disableEditing();
-                Toast.makeText(context, "expanse updated", Toast.LENGTH_SHORT).show();
-
-                // Refresh the item in the RecyclerView to reflect the changes
+                Toast.makeText(context, "Expanse updated", Toast.LENGTH_SHORT).show();
                 notifyItemChanged(position);
             } catch (NumberFormatException e) {
-                // Handle invalid amount format error
                 Toast.makeText(context, "Invalid amount format!", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
-                // Handle general errors
                 Toast.makeText(context, "Error saving expanse: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
 
         // Setup delete button listener to show confirmation dialog before deleting
         holder.deleteButton.setOnTouchListener((v, event) -> {

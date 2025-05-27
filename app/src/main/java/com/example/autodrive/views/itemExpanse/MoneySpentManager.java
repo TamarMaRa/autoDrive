@@ -12,8 +12,13 @@ import java.util.Map;
 public class MoneySpentManager {
     public static final String MONEY_SPENT_FIELD = "moneySpent";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-    private DocumentReference userRef = db.collection("users").document(userId);
+    private String userId;
+    private DocumentReference userRef;
+
+    public MoneySpentManager() {
+        this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        this.userRef = db.collection("users").document(userId);
+    }
 
     public void getMoneySpent(OnReceive onReceive) {
         userRef.get().addOnSuccessListener(documentSnapshot -> {
@@ -34,13 +39,18 @@ public class MoneySpentManager {
     }
 
     private static MoneySpentManager instance;
+
     public static MoneySpentManager getInstance() {
         return instance;
     }
 
     public static void init() {
-        if (instance == null)
+        if (instance == null) {
             instance = new MoneySpentManager();
+        } else {
+            instance.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            instance.userRef = instance.db.collection("users").document(instance.userId);
+        }
     }
 
     public interface OnReceive {
