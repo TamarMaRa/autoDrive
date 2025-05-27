@@ -15,10 +15,7 @@ public class FireStoreExpanseHelper {
 
     private ExpenseManagerFragment fbReply; // Reference to the fragment to handle Firestore responses
     private static final String TAG = "FireStoreExpanseHelper"; // Tag for logging
-    private static FirebaseFirestore db = FirebaseFirestore.getInstance(); // Firestore instance
-    private static FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser(); // Current logged-in user
-    // Collection reference to the user's expenses in Firestore
-    private static CollectionReference collectionRef = db.collection("users").document(currentUser.getUid()).collection("my_expenses");
+    private static final FirebaseFirestore db = FirebaseFirestore.getInstance(); // Firestore instance
 
     // Interface for Firestore responses (success and failure)
     public interface FBReply {
@@ -26,14 +23,24 @@ public class FireStoreExpanseHelper {
         void getOneSuccess(LessonItem lesson);
     }
 
-    // Constructor for FireStoreExpanseHelper, passing the fragment to handle callbacks
+    // Constructor
     public FireStoreExpanseHelper(ExpenseManagerFragment fbReply) {
         this.fbReply = fbReply;
     }
 
+    // Dynamically get the reference to the user's "my_expenses" collection
+    private CollectionReference getUserExpenseCollection() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            return db.collection("users").document(currentUser.getUid()).collection("my_expenses");
+        } else {
+            throw new IllegalStateException("No user is currently logged in");
+        }
+    }
+
     // Add a new expense to Firestore
     public void add(ExpenseItem expenseItem) {
-        collectionRef.add(expenseItem).addOnSuccessListener(documentReference -> {
+        getUserExpenseCollection().add(expenseItem).addOnSuccessListener(documentReference -> {
             String docId = documentReference.getId(); // Log the document ID after adding
             Log.d(TAG, "DocumentSnapshot added with ID: " + docId);
         }).addOnFailureListener(e -> Log.w(TAG, "Error adding document", e)); // Log failure
@@ -41,7 +48,7 @@ public class FireStoreExpanseHelper {
 
     // Update an existing expense in Firestore by its document ID
     public void update(String id, ExpenseItem expenseItem) {
-        collectionRef.document(id).update(
+        getUserExpenseCollection().document(id).update(
                 "expense", expenseItem.getExpense(),
                 "date", expenseItem.getDate(),
                 "description", expenseItem.getDescription()
@@ -54,7 +61,7 @@ public class FireStoreExpanseHelper {
 
     // Delete an expense from Firestore by its document ID
     public void delete(String id) {
-        collectionRef.document(id).delete()
+        getUserExpenseCollection().document(id).delete()
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "DocumentSnapshot deleted with ID: " + id); // Log success
                 })
@@ -65,6 +72,13 @@ public class FireStoreExpanseHelper {
 
     // Static method to get the collection reference for expenses
     public static CollectionReference getCollectionRef() {
-        return collectionRef;
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            return FirebaseFirestore.getInstance()
+                    .collection("users").document(currentUser.getUid())
+                    .collection("my_expenses");
+        } else {
+            throw new IllegalStateException("No user is currently logged in");
+        }
     }
 }

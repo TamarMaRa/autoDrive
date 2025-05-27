@@ -6,13 +6,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 
 public class FireStoreLessonHelper {
     private static final String TAG = "FireStoreLessonHelper"; // Log tag for debugging
-    private static FirebaseFirestore db = FirebaseFirestore.getInstance(); // Firestore instance
-    private static FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser(); // Get current authenticated user
-    private static CollectionReference collectionRef = db.collection("users").document(currentUser.getUid()).collection("my_lessons"); // Reference to user's "my_lessons" collection
+    private static final FirebaseFirestore db = FirebaseFirestore.getInstance(); // Firestore instance
 
     private FireStoreLessonHelper.FBReply fbReply; // Callback interface to handle responses from Firestore
 
@@ -27,17 +26,29 @@ public class FireStoreLessonHelper {
         this.fbReply = fbReply;
     }
 
+    // Dynamically get the reference to the user's "my_lessons" collection
+    private CollectionReference getUserLessonCollection() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            return db.collection("users").document(currentUser.getUid()).collection("my_lessons");
+        } else {
+            throw new IllegalStateException("No user is currently logged in");
+        }
+    }
+
     // Add a new lesson to Firestore
     public void add(LessonItem lesson) {
-        collectionRef.add(lesson).addOnSuccessListener(documentReference -> {
-            String docId = documentReference.getId(); // Get the ID of the added document
-            Log.d(TAG, "DocumentSnapshot added with ID: " + docId); // Log the document ID for reference
-        }).addOnFailureListener(e -> Log.w(TAG, "Error adding document", e)); // Log any error that occurs
+        getUserLessonCollection().add(lesson)
+                .addOnSuccessListener(documentReference -> {
+                    String docId = documentReference.getId(); // Get the ID of the added document
+                    Log.d(TAG, "DocumentSnapshot added with ID: " + docId); // Log the document ID for reference
+                })
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e)); // Log any error that occurs
     }
 
     // Update an existing lesson in Firestore
     public void update(String id, LessonItem lesson) {
-        collectionRef.document(id).update(
+        getUserLessonCollection().document(id).update(
                 "numLesson", lesson.getNumLesson(), // Update the number of lessons
                 "dateLesson", lesson.getDateLesson(), // Update the lesson date
                 "timeLesson", lesson.getTimeLesson() // Update the lesson time
@@ -50,7 +61,7 @@ public class FireStoreLessonHelper {
 
     // Delete a lesson from Firestore
     public void delete(String id) {
-        collectionRef.document(id).delete()
+        getUserLessonCollection().document(id).delete()
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "DocumentSnapshot deleted with ID: " + id); // Log successful deletion
                 })
@@ -59,8 +70,15 @@ public class FireStoreLessonHelper {
                 });
     }
 
-    // Get the reference to the "my_lessons" collection
+    // Get the reference to the "my_lessons" collection (for external static access if needed)
     public static CollectionReference getCollectionRef() {
-        return collectionRef;
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            return FirebaseFirestore.getInstance()
+                    .collection("users").document(currentUser.getUid())
+                    .collection("my_lessons");
+        } else {
+            throw new IllegalStateException("No user is currently logged in");
+        }
     }
 }
