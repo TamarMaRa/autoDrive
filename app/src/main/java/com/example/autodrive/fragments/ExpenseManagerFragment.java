@@ -13,12 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.autodrive.R;
 import com.example.autodrive.views.itemExpanse.ExpenseItem;
 import com.example.autodrive.views.itemExpanse.FireStoreExpanseHelper;
-import com.example.autodrive.views.itemExpanse.PaidLessonsManager;
+import com.example.autodrive.views.itemExpanse.MoneySpentManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -26,7 +27,8 @@ import java.util.Calendar;
 
 public class ExpenseManagerFragment extends Fragment {
 
-    private EditText tvAmount, tvDateExpanse, tvDescription, counterET;
+    private EditText tvAmount, tvDateExpanse, tvDescription;
+    private TextView counterET;
     private Button btn_add_payment;
     private FireStoreExpanseHelper fireStoreExpanseHelper;
 
@@ -41,7 +43,7 @@ public class ExpenseManagerFragment extends Fragment {
         tvDateExpanse = rootView.findViewById(R.id.payment_date_input);
         tvDescription = rootView.findViewById(R.id.describe_input);
         btn_add_payment = rootView.findViewById(R.id.btn_add_payment);
-        counterET = rootView.findViewById(R.id.counterET);
+        counterET = rootView.findViewById(R.id.txtMoneySpent);
 
         // Set click listener for "Add Payment" button
         btn_add_payment.setOnClickListener(v -> addPayment());
@@ -73,9 +75,9 @@ public class ExpenseManagerFragment extends Fragment {
             datePickerDialog.show();
         });
 
-        // Retrieve current number of paid lessons and display it in counter
-        PaidLessonsManager.getInstance().getPaidLessonsNumber(value -> {
-            counterET.setText(String.valueOf(value));
+        // Load total money spent
+        MoneySpentManager.getInstance().getMoneySpent(total -> {
+            counterET.setText("₪" + total);
         });
 
         return rootView;
@@ -98,10 +100,11 @@ public class ExpenseManagerFragment extends Fragment {
         ExpenseItem newExpense = new ExpenseItem(expense, dateExpanse, description);
         saveExpense(newExpense);
 
-        // Update the number of paid lessons (description should be a number here)
-        PaidLessonsManager.getInstance().getPaidLessonsNumber(value -> {
-            PaidLessonsManager.getInstance().updateNumberOfLessonsPaid(value + Integer.parseInt(description));
-            counterET.setText(String.valueOf(value + Integer.parseInt(description)));
+        // Update money spent
+        MoneySpentManager.getInstance().getMoneySpent(current -> {
+            int updated = current + expense;
+            MoneySpentManager.getInstance().updateMoneySpent(updated);
+            counterET.setText("₪" + updated);
         });
 
         Toast.makeText(getContext(), "Expense added!", Toast.LENGTH_SHORT).show();
@@ -111,7 +114,6 @@ public class ExpenseManagerFragment extends Fragment {
         fireStoreExpanseHelper.add(expenseItem);
     }
 
-    // Firestore callback (if needed later)
     public void getAllSuccess(ArrayList<ExpenseItem> expenseItems) {
     }
 

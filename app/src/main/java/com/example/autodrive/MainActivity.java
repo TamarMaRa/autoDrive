@@ -1,21 +1,17 @@
 package com.example.autodrive;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.autodrive.enterApp.FBAuthHelper;
-import com.example.autodrive.views.itemExpanse.PaidLessonsManager;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.autodrive.views.itemExpanse.MoneySpentManager;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements FBAuthHelper.FBReply {
@@ -95,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements FBAuthHelper.FBRe
     @Override
     public void loginSuccsess(FirebaseUser user) {
         // Initialize lesson tracking after login
-        PaidLessonsManager.init();
+        MoneySpentManager.init();
 
         // Go to the main menu
         Intent intent = new Intent(MainActivity.this, MenuActivity.class);

@@ -92,9 +92,10 @@ public class ExpanseAdapter extends FirestoreRecyclerAdapter<ExpenseItem, Expans
                 holder.showDeleteConfirmationDialog(docId); // Show confirmation dialog for deletion
             }
 
-            // Update the number of paid lessons when an item is deleted
-            PaidLessonsManager.getInstance().getPaidLessonsNumber(value -> {
-                PaidLessonsManager.getInstance().updateNumberOfLessonsPaid(value - Integer.parseInt(holder.discriptionExpanseTV.getText().toString()));
+            // Update the money spent value when an item is deleted
+            MoneySpentManager.getInstance().getMoneySpent(value -> {
+                int updated = value - Integer.parseInt(holder.amountTV.getText().toString());
+                MoneySpentManager.getInstance().updateMoneySpent(Math.max(updated, 0));
             });
 
             return true;
