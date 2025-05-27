@@ -49,7 +49,9 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation(libs.firebase.ui.firestore) // For Firestore UI
+    implementation ("com.github.TheButterflySDK:Android:1.3.1")
 }
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)

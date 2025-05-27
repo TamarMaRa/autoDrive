@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -18,6 +19,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.butterfly.sdk.ButterflySdk;
 import com.example.autodrive.databinding.ActivityMainBinding;
 import com.example.autodrive.fragments.ExpenseManagerFragment;
 import com.example.autodrive.fragments.LessonManagerFragment;
@@ -28,8 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MenuActivity extends AppCompatActivity {
 
-//    Button btnSignUp, btnLogIn;
-
+private static String API_KEY= "d2586f26-c61e-4741-a6dd-45df6f64938e";
     private ActivityMainBinding binding;
 
     @Override
@@ -122,5 +124,9 @@ public class MenuActivity extends AppCompatActivity {
     private void clearUserPreferences() {
         SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         preferences.edit().clear().apply();
+    }
+
+    public void onClickbfBtn(View view) {
+        ButterflySdk.openReporter(this, API_KEY);
     }
 }
