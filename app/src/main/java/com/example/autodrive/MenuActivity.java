@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -29,6 +30,8 @@ import com.example.autodrive.fragments.LessonListFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Locale;
+
 public class MenuActivity extends AppCompatActivity {
 
 private static String API_KEY= "d2586f26-c61e-4741-a6dd-45df6f64938e";
@@ -39,6 +42,9 @@ private static String API_KEY= "d2586f26-c61e-4741-a6dd-45df6f64938e";
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        // Force the app to use English
+        setLocale("en");
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
 // Set the background color
@@ -112,6 +118,15 @@ private static String API_KEY= "d2586f26-c61e-4741-a6dd-45df6f64938e";
 
             return true;
         });
+    }
+
+    private void setLocale(String languageCode) {
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 
     private void replaceFragment(Fragment toReplace) {
